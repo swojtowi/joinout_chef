@@ -8,7 +8,7 @@ var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 // $scope.registered_user_id 
 // $scope.peerServer
 
-joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
+joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $modal) {
 	
 	var peerServer;
 
@@ -33,7 +33,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
 			   
             }).
             error(function(data, status, headers, config) {
-                alert("error code 01");
+                handleError("error code 01");
             });
             
 	};
@@ -45,7 +45,8 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
                $scope.users = data;
             }).
             error(function(data, status, headers, config) {
-                alert("error code ERR_CONNECTION_TIMED_OUT");
+              cancel($scope.readingRegisteredUsersInterval)
+              handleError("error code ERR_CONNECTION_TIMED_OUT");
             });
 	};	
 		
@@ -73,7 +74,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
 		});
 		
 		$scope.peerServer.on('error', function(err){
-			alert(err.message);
+			handleError(err.message);
 			$scope.hideInCallDiv();
 		});		
 		
@@ -100,7 +101,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
 			window.localStream = stream;
 			$('#smileAndHairDiv').show();
 				
-		}, function(){ alert("error code 08"); });
+		}, function(){ handleError("error code 08"); });
    
 	};
 		
@@ -140,10 +141,51 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
 		
 	// poll server every 10 sec  (expressed in miliseconds)
 	$scope.readRegisteredUsers();
-  $interval($scope.readRegisteredUsers, 10000);
+  $scope.readingRegisteredUsersInterval = $interval($scope.readRegisteredUsers, 10000);
+  $scope.$on('$destroy', function() {
+    cancel($scope.readingRegisteredUsersInterval);
+  });
   
 	// by default ukrywany niektore elementy
 	$scope.hideInCallDiv();
 	$('#smileAndHairDiv').hide();
+  
+  function handleError(message) {
+    console.log('handleError ' +  message);
+    var errorModalInstance = $modal.open({
+      templateUrl: 'errorDialog.html',
+      controller: 'ErrorDialogCtrl',
+      resolve: {
+        message: function () {
+          return message;
+        }
+      }
+    });
+//    errorModalInstance.result.then(function (selectedItem) {
+//        $scope.selected = selectedItem;
+//      }, function () {
+//        $log.info('Modal dismissed at: ' + new Date());
+//      });
+//    };
+  }
 	
 });
+
+
+joinoutApp.controller('ErrorDialogCtrl', function($scope, $modalInstance, message) {
+  $scope.message = message;
+  $scope.ok = function () {
+    $modalInstance.close();
+  }
+});
+
+joinoutApp.controller('IncomingCallDialogCtrl', function($scope, $modalInstance, caller) {
+  $scope.caller = caller;
+  $scope.accept = function () {
+    
+  };
+  $scope.reject = function () {
+    
+  };
+});
+
