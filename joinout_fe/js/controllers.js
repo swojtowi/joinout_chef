@@ -42,10 +42,11 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 		
 		$http({method: 'GET', url: joinoutServerHost+'/users'}).
             success(function(data, status, headers, config) {
+              console.log('success');
                $scope.users = data;
             }).
             error(function(data, status, headers, config) {
-              cancel($scope.readingRegisteredUsersInterval)
+              $interval.cancel($scope.readingRegisteredUsersInterval)
               handleError("error code ERR_CONNECTION_TIMED_OUT");
             });
 	};	
@@ -157,7 +158,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 	$scope.readRegisteredUsers();
   $scope.readingRegisteredUsersInterval = $interval($scope.readRegisteredUsers, 10000);
   $scope.$on('$destroy', function() {
-    cancel($scope.readingRegisteredUsersInterval);
+    $interval.cancel($scope.readingRegisteredUsersInterval);
   });
   
 	// by default ukrywany niektore elementy
