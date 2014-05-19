@@ -1,6 +1,6 @@
-var joinoutServerHost = "http://ec2-54-188-159-146.us-west-2.compute.amazonaws.com:8080";
-var stunTurnServerHost = "ec2-54-188-159-146.us-west-2.compute.amazonaws.com";
-var peerJsServerHost = "ec2-54-188-159-146.us-west-2.compute.amazonaws.com";
+var joinoutServerHost = "http://ec2-54-188-109-128.us-west-2.compute.amazonaws.com:8080";
+var stunTurnServerHost = "ec2-54-188-109-128.us-west-2.compute.amazonaws.com";
+var peerJsServerHost = "ec2-54-188-109-128.us-west-2.compute.amazonaws.com";
 
 var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 
@@ -8,7 +8,7 @@ var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 // $scope.registered_user_id 
 // $scope.peerServer
 
-joinoutApp.controller('MainCtrl', function($scope, $filter, $http) {
+joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval) {
 	
 	var peerServer;
 
@@ -138,10 +138,10 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http) {
 		$('#inCallDiv2').show();
 	};	
 		
-	// poll server every 10 sec  (expressed in miliseconds)   DOES NOT WORK 
-	//$interval($scope.readRegisteredUsers(), 10000);
-	$scope.readRegisteredUsers()
-		
+	// poll server every 10 sec  (expressed in miliseconds)
+	$scope.readRegisteredUsers();
+  $interval($scope.readRegisteredUsers, 10000);
+  
 	// by default ukrywany niektore elementy
 	$scope.hideInCallDiv();
 	$('#smileAndHairDiv').hide();
