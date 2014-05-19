@@ -66,13 +66,27 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 			
 			
 		// Receiving a call
-		$scope.peerServer.on('call', function(call){
-			
-		  // Answer the call automatically (instead of prompting user) for demo purposes
-		  call.answer(window.localStream);
-		  $scope.handleCall(call);		
-		});
-		
+		$scope.peerServer.on('call', function(call) {
+      
+      var incomingCallDialogInstance = $modal.open({
+        templateUrl: 'incomingCallDialog.html',
+        controller: 'IncomingCallDialogCtrl',
+        resolve: {
+          caller: function () {
+            return 'UNKNOWN';
+          }
+        }
+      });
+      incomingCallDialogInstance.result.then(function (result) {
+        if (result.accepted) {
+          call.answer(window.localStream);
+          $scope.handleCall(call);	
+        } else {
+          console.log('Call rejected');
+        }
+      });
+    });
+    
 		$scope.peerServer.on('error', function(err){
 			handleError(err.message);
 			$scope.hideInCallDiv();
@@ -105,7 +119,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
    
 	};
 		
-	$scope.handleCall = function(call) {		
+	$scope.handleCall = function(call) {
 	
 		// Hang up on an existing call if present
 		if (window.existingCall) {
@@ -132,7 +146,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 	$scope.hideInCallDiv = function() {		
 		$('#inCallDiv').hide();
 		$('#inCallDiv2').hide();
-	};	
+	};
 		
 	$scope.showInCallDiv = function() {		
 		$('#inCallDiv').show();
@@ -151,7 +165,6 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 	$('#smileAndHairDiv').hide();
   
   function handleError(message) {
-    console.log('handleError ' +  message);
     var errorModalInstance = $modal.open({
       templateUrl: 'errorDialog.html',
       controller: 'ErrorDialogCtrl',
@@ -168,7 +181,6 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 //      });
 //    };
   }
-	
 });
 
 
@@ -182,10 +194,10 @@ joinoutApp.controller('ErrorDialogCtrl', function($scope, $modalInstance, messag
 joinoutApp.controller('IncomingCallDialogCtrl', function($scope, $modalInstance, caller) {
   $scope.caller = caller;
   $scope.accept = function () {
-    
+    $modalInstance.close({accepted: true});
   };
   $scope.reject = function () {
-    
+    $modalInstance.close({accepted: false});
   };
 });
 
