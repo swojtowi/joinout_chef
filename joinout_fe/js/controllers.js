@@ -129,6 +129,22 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 		$scope.hideInCallDiv();	
 	};		
 		
+	$scope.muteVideo = function() {
+		window.existingCall.localStream.getVideoTracks()[0].enabled = false;
+	};	
+	
+	$scope.unmuteVideo = function() {
+		window.existingCall.localStream.getVideoTracks()[0].enabled = true;
+	};		
+	
+	$scope.muteAudio = function() {
+		window.existingCall.localStream.getAudioTracks()[0].enabled = false;
+	};	
+	
+	$scope.unmuteAudio = function() {
+		window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+	};
+		
 	$scope.enableUserMedia = function() {
 
 		// Get audio/video stream
