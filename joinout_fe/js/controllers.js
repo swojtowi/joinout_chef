@@ -50,6 +50,17 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
               handleError("error code ERR_CONNECTION_TIMED_OUT");
             });
 	};	
+	
+	$scope.updateLastActivityDate = function() {
+		
+		$http({method: 'PUT', url: joinoutServerHost+'/users/'+$scope.registered_user_id}).
+            success(function(data, status, headers, config) {
+              console.log('updateLastActivityDate success');
+            }).
+            error(function(data, status, headers, config) {
+              handleError("error code ERR_CONNECTION_TIMED_OUT");
+            });
+	};
 		
 	$scope.createPeerServerConnection = function() {
 				
@@ -60,6 +71,9 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 			 {	url: 'stun:'+stunTurnServerHost+':3478',		credential: 'youhavetoberealistic',		username: 'ninefingers'		}
 			]}
 		});
+		
+		
+		
 		
 		$scope.peerServer.on('open', function(){
 		  $('#my-id').text($scope.peerServer.id);
@@ -79,6 +93,10 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
         }
       });
       incomingCallDialogInstance.result.then(function (result) {
+		  
+		  // Update last_activity_date
+		$scope.updateLastActivityDate();
+		  
         if (result.accepted) {
           call.answer(window.localStream);
           $scope.handleCall(call);	
@@ -89,6 +107,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
     });
     
 		$scope.peerServer.on('error', function(err){
+			
 			handleError(err.message);
 			$scope.hideInCallDiv();
 		});		
@@ -96,6 +115,10 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 	};
 		
 	$scope.makeACall = function(user) {
+		
+		// Update last_activity_date
+		$scope.updateLastActivityDate();
+		
 		// Initiate a call!
         var call = $scope.peerServer.call(user.user_id, window.localStream);
         $scope.handleCall(call);	

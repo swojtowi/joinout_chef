@@ -7,6 +7,7 @@ npm install mongodb
 npm install monk
 npm install mongoose
 npm install express
+npm install safe_datejs
 
 3. Start app 'node server.js'
 
