@@ -8,11 +8,15 @@ var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 // $scope.registered_user_id 
 // $scope.peerServer
 
-joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $modal) {
-	
+joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player) {
+  
 	var peerServer;
+  var phoneRingingPlayer = player;
+  phoneRingingPlayer.media.url = 'audio/phone-ringing.mp3';
+  phoneRingingPlayer.loop = true;
 
 	$scope.registerNewUser = function() {
+    $rootScope.$broadcast('loader_show');
 		
 		var generated_double_id = Math.random();
 		var generated_string_id = generated_double_id.toString().replace(".", "");
@@ -30,10 +34,11 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 			   $scope.createPeerServerConnection();
 			   
 			   $scope.enableUserMedia();
-			   
+              $rootScope.$broadcast('loader_hide');
             }).
             error(function(data, status, headers, config) {
-                handleError("error code 01");
+              $rootScope.$broadcast('loader_hide');
+              handleError("error code 01");
             });
             
 	};
@@ -42,7 +47,6 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 		
 		$http({method: 'GET', url: joinoutServerHost+'/users'}).
             success(function(data, status, headers, config) {
-              console.log('success');
                $scope.users = data;
             }).
             error(function(data, status, headers, config) {
@@ -78,11 +82,11 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 		$scope.peerServer.on('open', function(){
 		  $('#my-id').text($scope.peerServer.id);
 		});
-			
-			
-		// Receiving a call
+		
+    // Receiving a call
 		$scope.peerServer.on('call', function(call) {
       
+      phoneRingingPlayer.play();
       var incomingCallDialogInstance = $modal.open({
         templateUrl: 'incomingCallDialog.html',
         controller: 'IncomingCallDialogCtrl',
@@ -101,8 +105,9 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
           call.answer(window.localStream);
           $scope.handleCall(call);	
         } else {
-          console.log('Call rejected');
+          console.log('You have rejected the call!');
         }
+        phoneRingingPlayer.stop();
       });
     });
     
@@ -110,6 +115,7 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 			
 			handleError(err.message);
 			$scope.hideInCallDiv();
+      phoneRingingPlayer.stop();
 		});		
 		
 	};
@@ -177,7 +183,13 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 		$('#their-id').text(call.peer);
       
 		call.on('close', $scope.hideInCallDiv);
-	};	
+//    call.on('close', function () {
+//      if ($('#their-video').prop('src') == URL.createObjectURL(stream)) {
+//        handleMessage('Your call has been rejected!', 'Rejected call');
+//      }
+//      $scope.hideInCallDiv();
+//    });
+	};
 		
 	$scope.withoutMeFilter = function(user) {
 		return !($scope.registered_user_id == user.user_id);
@@ -205,26 +217,28 @@ joinoutApp.controller('MainCtrl', function($scope, $filter, $http, $interval, $m
 	$('#smileAndHairDiv').hide();
   
   function handleError(message) {
+    handleMessage(message, 'Sorry, error occurred!');
+  }
+  
+  function handleMessage(message, title) {
     var errorModalInstance = $modal.open({
-      templateUrl: 'errorDialog.html',
-      controller: 'ErrorDialogCtrl',
+      templateUrl: 'messageDialog.html',
+      controller: 'MessageDialogCtrl',
       resolve: {
+        title: function () {
+          return title;
+        },
         message: function () {
           return message;
         }
       }
     });
-//    errorModalInstance.result.then(function (selectedItem) {
-//        $scope.selected = selectedItem;
-//      }, function () {
-//        $log.info('Modal dismissed at: ' + new Date());
-//      });
-//    };
   }
 });
 
 
-joinoutApp.controller('ErrorDialogCtrl', function($scope, $modalInstance, message) {
+joinoutApp.controller('MessageDialogCtrl', function($scope, $modalInstance, title, message) {
+  $scope.title = title;
   $scope.message = message;
   $scope.ok = function () {
     $modalInstance.close();
@@ -241,3 +255,46 @@ joinoutApp.controller('IncomingCallDialogCtrl', function($scope, $modalInstance,
   };
 });
 
+joinoutApp.factory('player', function(audio, $rootScope) {
+  var player;
+  var paused = false;
+
+  player = {
+    media: {
+      url: null
+    },
+    playing: false,
+    play: function(track, album) {
+      if (!paused && this.media.url) audio.src = this.media.url;
+      audio.play();
+      player.playing = true;
+      paused = false;
+    },
+    pause: function() {
+      if (player.playing) {
+        audio.pause();
+        player.playing = false;
+        paused = true;
+      }
+    },
+    stop: function() {
+      if (player.playing) {
+        audio.pause();
+        audio.load();
+        player.playing = false;
+        paused = false;
+      }
+    }
+  };
+  
+  audio.addEventListener('ended', function() {
+    $rootScope.$apply(player.next);
+  }, false);
+
+  return player;
+});
+
+joinoutApp.factory('audio', function($document) {
+  var audio = $document[0].createElement('audio');
+  return audio;
+});
