@@ -137,24 +137,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		window.existingCall.close();
 		$scope.hideInCallDiv();	
 	};		
-		
-	///////////
-	$scope.muteVideo = function() {
-		window.existingCall.localStream.getVideoTracks()[0].enabled = false;
-	};	
-	
-	$scope.unmuteVideo = function() {
-		window.existingCall.localStream.getVideoTracks()[0].enabled = true;
-	};		
-	
-	$scope.muteAudio = function() {
-		window.existingCall.localStream.getAudioTracks()[0].enabled = false;
-	};	
-	
-	$scope.unmuteAudio = function() {
-		window.existingCall.localStream.getAudioTracks()[0].enabled = true;
-	};
-	/////////////////
+
 	$scope.muteUnmuteAudio = function() {
 		if(window.existingCall.localStream.getAudioTracks()[0].enabled){
 			window.existingCall.localStream.getAudioTracks()[0].enabled = false;
@@ -165,22 +148,17 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		}
 	};
 	
-	
 	$scope.muteUnmuteVideo = function() {
-		if(window.existingCall.localStream.getAudioTracks()[0].enabled){
-			window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+		if(window.existingCall.localStream.getVideoTracks()[0].enabled){
+			window.existingCall.localStream.getVideoTracks()[0].enabled = true;
 			$scope.muteUnmuteVideoLabel = "Video on";
 		} else {
-			window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+			window.existingCall.localStream.getVideoTracks()[0].enabled = true;
 			$scope.muteUnmuteVideoLabel = "Video off";
 		}
 		
 	};
-	
-	
-	//////////////	
-	
-	
+		
 	$scope.enableUserMedia = function() {
 
 		// Get audio/video stream
