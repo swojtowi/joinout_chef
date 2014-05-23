@@ -2,12 +2,12 @@
 
 1. Copy file into a directory 
 2. Run in the directory with server.js
-npm install restify
-npm install mongodb
-npm install monk
 npm install mongoose
-npm install express
-npm install safe_datejs
+npm install restify
+#npm install mongodb
+#npm install monk
+#npm install express
+#npm install safe_datejs
 
 3. Start app 'node server.js'
 

@@ -16,6 +16,14 @@ var User = new Schema({
 
 var UserModel = mongoose.model('User', User);  
 
+var Call = new Schema({  
+    origin_id: { type: String, required: true },  
+    terminating_id: { type: String, required: true },  
+    event_type: { type: String, required: true },
+    event_date: { type: Date, default: Date.now }
+});
+var CallModel = mongoose.model('Call', Call); 
+
 // create a server
 var restify = require('restify'),
     server = restify.createServer({
@@ -103,6 +111,42 @@ server.put('/users/:id', function (req, res){
         });
   return res.send("200 OK");
 });
+
+
+// GET all calls
+//curl http://localhost:8080/calls
+server.get('/calls', function (req, res){
+  return CallModel.find(function (err, calls) {
+    if (!err) {
+      return res.send(calls);
+    } else {
+      return console.log(err);
+    }
+  });
+});
+
+
+// Store information about call
+//curl -i -X POST  http://localhost:8080/calls/aa1/bb1 -d '{ "event_type":"start call"}'
+server.post('/calls/:origid/:termid', function (req, res){
+	 var call;
+	  var json = JSON.parse(req.body);
+
+	  call = CallModel({
+		  origin_id:req.params.origid,  
+		  terminating_id:req.params.termid,  
+		  event_type:json.event_type
+	  });
+	  call.save(function (err) {
+	    if (!err) {
+	      return console.log("logged");
+	    } else {
+	      return console.log(err);
+	    }
+	  });
+	  return res.send(call);
+});
+
 
 
 server.listen(8080);
