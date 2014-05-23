@@ -2,7 +2,7 @@
 <html lang="en" ng-app="joinoutApp">
 <head>
   <meta charset="utf-8">
-  <title>JoinOut 0.1a by IMPAQ</title>
+  <title>JoinOut 0.2 by IMPAQ (in particular by: M2M&amp;CC)</title>
   <!-- link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" -->
   <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
   
@@ -59,7 +59,7 @@
 				<td colspan="2" align="center">
 					<!-- Header -->	
 					<div>
-						<h2>JoinOut 0.1a by IMPAQ</h2>
+						<h2>JoinOut 0.2 by IMPAQ</h2>
 						<i>(in particular by: M2M&amp;CC)</i>
 					</div>
 				</td>
@@ -120,8 +120,8 @@
 					Rozmowa z: <br />
 					<span id="their-id">...</span><br />
 					<button ng-click="finishACall()">Finish Call</button> <br />
-					<button ng-click="muteVideo()">Mute video</button> | <button ng-click="unmuteVideo()">UnMute video</button> <br />
-					<button ng-click="muteAudio()">Mute audio</button> | <button ng-click="unmuteAudio()">UnMute audio</button>
+					<button ng-click="muteUnmuteAudio()">{{muteUnmuteAudioLabel}}</button> | 
+					<button ng-click="muteUnmuteVideo()">{{muteUnmuteVideoLabel}}</button>
 					</div>
 				</td>
 			</tr>

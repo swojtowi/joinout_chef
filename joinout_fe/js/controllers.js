@@ -10,12 +10,15 @@ var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 
 joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player) {
   
-	var peerServer;
+  var peerServer;
   var phoneRingingPlayer = player;
   phoneRingingPlayer.media.url = 'audio/phone-ringing.mp3';
   phoneRingingPlayer.loop = true;
+  
+  $scope.muteUnmuteAudioLabel = "Audio off";
+  $scope.muteUnmuteVideoLabel = "Video off";
 
-	$scope.registerNewUser = function() {
+  $scope.registerNewUser = function() {
     $rootScope.$broadcast('loader_show');
 		
 		var generated_double_id = Math.random();
@@ -135,6 +138,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		$scope.hideInCallDiv();	
 	};		
 		
+	///////////
 	$scope.muteVideo = function() {
 		window.existingCall.localStream.getVideoTracks()[0].enabled = false;
 	};	
@@ -150,7 +154,33 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	$scope.unmuteAudio = function() {
 		window.existingCall.localStream.getAudioTracks()[0].enabled = true;
 	};
+	/////////////////
+	$scope.muteUnmuteAudio = function() {
+		if(window.existingCall.localStream.getAudioTracks()[0].enabled){
+			window.existingCall.localStream.getAudioTracks()[0].enabled = false;
+			$scope.muteUnmuteAudioLabel = "Audio on";
+		} else {
+			window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+			$scope.muteUnmuteAudioLabel = "Audio off";
+		}
+	};
+	
+	
+	$scope.muteUnmuteVideo = function() {
+		if(window.existingCall.localStream.getAudioTracks()[0].enabled){
+			window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+			$scope.muteUnmuteVideoLabel = "Video on";
+		} else {
+			window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+			$scope.muteUnmuteVideoLabel = "Video off";
+		}
 		
+	};
+	
+	
+	//////////////	
+	
+	
 	$scope.enableUserMedia = function() {
 
 		// Get audio/video stream
@@ -178,9 +208,9 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		});
 
 		// UI stuff
-		$scope.showInCallDiv();
+//		$scope.showInCallDiv();
 		window.existingCall = call;
-		$('#their-id').text(call.peer);
+	//	$('#their-id').text(call.peer);
       
 		call.on('close', $scope.hideInCallDiv);
 //    call.on('close', function () {
