@@ -4,5 +4,8 @@
 .settings
 target
 
+# NetBeans project directory
+nbproject
+
 # node modules
 node_modules
