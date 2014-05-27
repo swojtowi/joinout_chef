@@ -11,9 +11,6 @@ var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player) {
   
   var peerServer;
-  var phoneRingingPlayer = player;
-  phoneRingingPlayer.media.url = 'audio/phone-ringing.mp3';
-  phoneRingingPlayer.loop = true;
   $scope.info_message = "To make a call you have to register first !!!";
   
   $scope.muteUnmuteAudioLabel = "Audio off";
@@ -90,7 +87,8 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
     // Receiving a call
 		$scope.peerServer.on('call', function(call) {
       
-      phoneRingingPlayer.play();
+      player.setSound(player.sounds.PHONE_RINGING);
+      player.play();
       var incomingCallDialogInstance = $modal.open({
         templateUrl: 'incomingCallDialog.html',
         controller: 'IncomingCallDialogCtrl',
@@ -111,7 +109,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
         } else {
           console.log('You have rejected the call!');
         }
-        phoneRingingPlayer.stop();
+        player.stop();
       });
     });
     
@@ -119,12 +117,14 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			
 			handleError(err.message);
 			$scope.hideInCallDiv();
-      phoneRingingPlayer.stop();
+      player.stop();
 		});		
 		
 	};
 		
 	$scope.makeACall = function(user) {
+    player.setSound(player.sounds.PHONE_CALLING);
+    player.play();
 		
 		// Update last_activity_date
 		$scope.updateLastActivityDate();
@@ -183,8 +183,9 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		}
 
 		// Wait for stream on the call, then set peer video display
-		call.on('stream', function(stream){
+		call.on('stream', function(stream) {
 			$('#their-video').prop('src', URL.createObjectURL(stream));
+      player.stop();
 		});
 
 		// UI stuff
@@ -197,6 +198,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		call.on('close', $scope.hideInCallDiv);
 //    call.on('close', function () {
 //      if ($('#their-video').prop('src') == URL.createObjectURL(stream)) {
+//        player.stop();
 //        handleMessage('Your call has been rejected!', 'Rejected call');
 //      }
 //      $scope.hideInCallDiv();
@@ -271,8 +273,15 @@ joinoutApp.controller('IncomingCallDialogCtrl', function($scope, $modalInstance,
 joinoutApp.factory('player', function(audio, $rootScope) {
   var player;
   var paused = false;
-
+  audio.loop = true;
   player = {
+    sounds: {
+      PHONE_CALLING: {
+        url: 'audio/phone-calling.mp3'
+      }, PHONE_RINGING: {
+        url: 'audio/phone-ringing.mp3'
+      }
+    },
     media: {
       url: null
     },
@@ -297,6 +306,9 @@ joinoutApp.factory('player', function(audio, $rootScope) {
         player.playing = false;
         paused = false;
       }
+    },
+    setSound: function(sound) {
+      this.media.url = sound.url;
     }
   };
   
