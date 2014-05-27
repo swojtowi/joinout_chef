@@ -23,40 +23,38 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		var generated_string_id = generated_double_id.toString().replace(".", "");
 		
 		var positionInJson = angular.toJson({
-            "user_name":$scope.userName,"user_id":generated_string_id
-        });
-        
-        $http({method: 'POST', url: joinoutServerHost+'/users', data:JSON.stringify(positionInJson)}).
-            success(function(data, status, headers, config) {
-               $scope.registered_user_name = data.user_name;
-               $scope.registered_user_id = data.user_id;
-               
-               $scope.readRegisteredUsers();
-			   $scope.createPeerServerConnection();
-			   
-			   $scope.enableUserMedia();
-			   $rootScope.$broadcast('loader_hide');
-			   $scope.info_message="To make a call click on link";
-              
-              
-            }).
-            error(function(data, status, headers, config) {
-              $rootScope.$broadcast('loader_hide');
-              handleError("error code 01");
-            });
-            
-	};
+      user_name: $scope.userName,
+      user_id: generated_string_id
+    });
+
+    $http({
+      method: 'POST',
+      url: joinoutServerHost + '/users',
+      data: JSON.stringify(positionInJson)
+    }).success(function(data, status, headers, config) {
+      $scope.registered_user_name = data.user_name;
+      $scope.registered_user_id = data.user_id;
+      $scope.readRegisteredUsers();
+      $scope.createPeerServerConnection();
+      $scope.enableUserMedia();
+      $rootScope.$broadcast('loader_hide');
+      $scope.info_message = "To make a call click on link";
+    }).error(function(data, status, headers, config) {
+      $rootScope.$broadcast('loader_hide');
+      handleError("error code 01");
+    });
+  };
 		
 	$scope.readRegisteredUsers = function() {
-		
-		$http({method: 'GET', url: joinoutServerHost+'/users'}).
-            success(function(data, status, headers, config) {
-               $scope.users = data;
-            }).
-            error(function(data, status, headers, config) {
-              $interval.cancel($scope.readingRegisteredUsersInterval)
-              handleError("error code ERR_CONNECTION_TIMED_OUT");
-            });
+		$http({
+      method: 'GET',
+      url: joinoutServerHost + '/users'
+    }).success(function (data, status, headers, config) {
+      $scope.users = data;
+    }).error(function (data, status, headers, config) {
+      $interval.cancel($scope.readingRegisteredUsersInterval)
+      handleError("error code ERR_CONNECTION_TIMED_OUT");
+    });
 	};	
 	
 	$scope.updateLastActivityDate = function() {
