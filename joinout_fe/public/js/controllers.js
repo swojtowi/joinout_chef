@@ -156,7 +156,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	
 	$scope.muteUnmuteVideo = function() {
 		if(window.existingCall.localStream.getVideoTracks()[0].enabled){
-			window.existingCall.localStream.getVideoTracks()[0].enabled = true;
+			window.existingCall.localStream.getVideoTracks()[0].enabled = false;
 			$scope.muteUnmuteVideoLabel = "Video on";
 		} else {
 			window.existingCall.localStream.getVideoTracks()[0].enabled = true;
