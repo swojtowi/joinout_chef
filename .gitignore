@@ -1,11 +1,1 @@
-# Eclipse project files
-.classpath
-.project
-.settings
-target
-
-# NetBeans project directory
-nbproject
-
-# node modules
 node_modules

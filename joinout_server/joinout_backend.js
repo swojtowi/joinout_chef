@@ -2,6 +2,8 @@
 // http://synthmedia.co.uk/blog/basic-nodejs-api-with-restify-and-save#.U3HaaXV53IA
 mongoose = require('mongoose');
 
+var port = 8080;
+
 // Database
 mongoose.connect('mongodb://localhost/test');
 
@@ -112,7 +114,6 @@ server.put('/users/:id', function (req, res){
   return res.send("200 OK");
 });
 
-
 // GET all calls
 //curl http://localhost:8080/calls
 server.get('/calls', function (req, res){
@@ -148,6 +149,5 @@ server.post('/calls/:origid/:termid', function (req, res){
 });
 
 
-
-server.listen(8080);
-console.log('Starting Restify on port: 8080');
+server.listen(port);
+console.log('Starting Joinout Backend on port: ' + port);

@@ -1,0 +1,11 @@
+{
+  "name"         : "Joinout FrontEnd",
+  "version"      : "0.0.1",
+  "description"  : "Joinout FrontEnd",
+  "main"         : "joinout_frontend.js",
+  "author"       : "IMPAQ M2M&CC",
+  "dependencies" : {
+    "express"    : "~3.4.4",
+    "mongoose"   : "~3.8.2"
+  }
+}

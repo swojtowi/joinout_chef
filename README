@@ -1,2 +1,0 @@
-joinout_server - server part (based on Node.js, exposes REST API, uses MongoDB)
-joinout_fe - FE part (written in Angularjs)

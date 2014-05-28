@@ -1,0 +1,11 @@
+{
+  "name"         : "Joinout BackEnd",
+  "version"      : "0.0.1",
+  "description"  : "Joinout BackEnd",
+  "main"         : "joinout_backend.js",
+  "author"       : "IMPAQ M2M&CC",
+  "dependencies" : {
+    "restify"    : "~2.8.1",
+    "mongoose"   : "~3.8.2"
+  }
+}
