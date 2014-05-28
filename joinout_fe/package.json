@@ -1,5 +1,5 @@
 {
-  "name"         : "Joinout FrontEnd",
+  "name"         : "Joinout_FrontEnd",
   "version"      : "0.0.1",
   "description"  : "Joinout FrontEnd",
   "main"         : "joinout_frontend.js",
