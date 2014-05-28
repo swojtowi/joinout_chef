@@ -134,6 +134,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		
 	$scope.finishACall = function() {
 		window.existingCall.close();
+                player.stop();
 		$scope.info_message="To make a call click on link";
 		$scope.hideInCallDiv();	
 	};		
