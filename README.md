@@ -99,7 +99,7 @@ In instruction below please ensure that you use proper path(s) :)
 
     copy new nginx.conf
 
-    *cp joinout/joinout_util/nginx.conf /etc/nginx/*
+    *sudo cp joinout/joinout_util/nginx.conf /etc/nginx/*
 
 10. install forever
 
@@ -122,11 +122,15 @@ In instruction below please ensure that you use proper path(s) :)
 
 3. start Joinout Server
 
+    *cd*
+
     *cd joinout/joinout_server/*
     
     *forever -m5 joinout_backend.js &*
 
 4. start JoinOut Frontend
+
+    *cd*
 
     *cd joinout/joinout_fe/*
 
