@@ -1,9 +1,9 @@
-//var joinoutServerHost = "http://54.245.236.20/api";
-var joinoutServerHost = "http://54.245.236.20:8080";
+var joinoutServerHost = "http://54.245.236.20/api";
+//var joinoutServerHost = "http://54.245.236.20:8080";
 var stunTurnServerHost = "54.245.236.20";
 var peerJsServerHost = "54.245.236.20";
-//var peerJsServerPort = 80;
-var peerJsServerPort = 9000;
+var peerJsServerPort = 80;
+//var peerJsServerPort = 9000;
 //var peerJsServerPath = 'peerjs';
 var peerJsServerPath = '';
 
