@@ -22,15 +22,15 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
   $scope.muteUnmuteVideoLabel = "Video off";
 
   $scope.registerNewUser = function() {
-    $rootScope.$broadcast('loader_show');
+	$rootScope.$broadcast('loader_show');
 		
 		var generated_double_id = Math.random();
 		var generated_string_id = generated_double_id.toString().replace(".", "");
 		
 		var positionInJson = angular.toJson({
-      user_name: $scope.userName,
-      user_id: generated_string_id
-    });
+			user_name: $scope.userName,
+			user_id: generated_string_id
+		});
 
     $http({
       method: 'POST',
@@ -189,17 +189,34 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		// Wait for stream on the call, then set peer video display
 		call.on('stream', function(stream) {
 			$('#their-video').prop('src', URL.createObjectURL(stream));
-      player.stop();
+			player.stop();
 		});
+
+
+		// Wait for stream on the call, then set peer video display
+		call.on('disconnect', function(id) {
+			alert("disconnected");
+		});
+		
 
 		// UI stuff
 		$scope.showInCallDiv();
 		window.existingCall = call;
 		
 		 $scope.info_message = "Currently in call with: "+call.peer;
-		//$('#their-id').text(call.peer);
       
-		call.on('close', $scope.hideInCallDiv);
+		call.on('close', function(){
+			
+			// hide some div
+			$scope.info_message="To make a call click on link 2";
+			$('#inCallDiv').hide();
+			
+			// clean video
+			$('#their-video').prop('src', '');
+		});
+		
+		
+		
 //    call.on('close', function () {
 //      if ($('#their-video').prop('src') == URL.createObjectURL(stream)) {
 //        player.stop();
@@ -215,7 +232,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	
 	$scope.hideInCallDiv = function() {		
 		$('#inCallDiv').hide();
-		$('#inCallDiv2').hide();
+		
 	};
 		
 	$scope.showInCallDiv = function() {		
@@ -232,7 +249,6 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
   
 	// by default ukrywany niektore elementy
 	$scope.hideInCallDiv();
-	$('#smileAndHairDiv').hide();
   
   function handleError(message) {
 	$scope.info_message="To make a call click on link";
