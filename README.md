@@ -75,10 +75,6 @@ In instruction below please ensure that you use proper path(s) :)
 
     *cd joinout/joinout_server/*
     
-    *-- npm install restify*
-    
-    *-- npm install mongoose*
-    
     *npm install*
 
 8. install and configure joinout frontend
@@ -120,13 +116,13 @@ In instruction below please ensure that you use proper path(s) :)
 
     *sudo service mongod start*
 
-3. start Joinout Server
+3. start Joinout Server (NOTICE: we log everything !!!)
 
     *cd*
 
     *cd joinout/joinout_server/*
     
-    *forever -m5 joinout_backend.js &*
+    *forever start -l joinout_server_forever.log -o joinout_servere_out.log -e joinout_server_err.log joinout_backend.js*
 
 4. start JoinOut Frontend
 
@@ -134,8 +130,8 @@ In instruction below please ensure that you use proper path(s) :)
 
     *cd joinout/joinout_fe/*
 
-    *forever -m5 joinout_frontend.js &*
-
+    *forever start -l joinout_fe_forever.log -o joinout_fe_out.log -e joinout_fe_err.log joinout_frontend.js*
+    
 5. start nginx
 
     *sudo chkconfig nginx on*
@@ -164,6 +160,18 @@ In instruction below please ensure that you use proper path(s) :)
     // CREATE a Single User
     
     *curl -i -X POST  http://54.245.236.20/api/users -d '{ "user_name":"John Rabmo", "user_id":"997" }'*
+    
+    
+    
+# Ports
+
+PeerJS 9000
+
+JoinOut Server 8080
+
+JoinOut FrontEnd 9090
+
+
 
 
 
