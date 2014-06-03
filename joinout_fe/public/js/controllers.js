@@ -49,17 +49,24 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
       handleError("error code 01");
     });
   };
+  
+  $scope.pendingReadRegisteredUsers = 0;
 		
 	$scope.readRegisteredUsers = function() {
-		$http({
-      method: 'GET',
-      url: joinoutServerHost + '/users'
-    }).success(function (data, status, headers, config) {
-      $scope.users = data;
-    }).error(function (data, status, headers, config) {
-      $interval.cancel($scope.readingRegisteredUsersInterval)
-      handleError("error code ERR_CONNECTION_TIMED_OUT");
-    });
+    if ($scope.pendingReadRegisteredUsers === 0) {
+      $scope.pendingReadRegisteredUsers++;
+      $http({
+        method: 'GET',
+        url: joinoutServerHost + '/users'
+      }).success(function (data, status, headers, config) {
+        $scope.users = data;
+      }).error(function (data, status, headers, config) {
+        $interval.cancel($scope.readingRegisteredUsersInterval)
+        handleError("error code ERR_CONNECTION_TIMED_OUT");
+      }).finally(function() {
+        $scope.pendingReadRegisteredUsers--;
+      });
+    }
 	};	
 	
 	$scope.updateLastActivityDate = function() {
