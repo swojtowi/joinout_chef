@@ -17,6 +17,9 @@
   <script src="js/directives.js"></script>
   
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+  <script type="text/javascript" src="https://github.com/downloads/stacktracejs/stacktrace.js/stacktrace-min-0.4.js"></script>
+  
   <script type="text/javascript" src="http://cdn.peerjs.com/0.3/peer.js"></script>
   <script>
 	// Compatibility shim
@@ -112,6 +115,9 @@
 		<video style="width: 800px; height: 600px;" id="their-video" autoplay></video>
 	</div>
   
+  <p>
+        <a ng-click="causeError()">Cause Error</a>...
+    </p>
   
 </body>
 </html>

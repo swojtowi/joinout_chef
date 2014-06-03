@@ -13,7 +13,95 @@ var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
 // $scope.registered_user_id 
 // $scope.peerServer
 
+
+joinoutApp.factory("stacktraceService",function() {
+	return({  print: printStackTrace  });   }
+);
+        
+joinoutApp.provider(
+            "$exceptionHandler",
+            {
+                $get: function( errorLogService ) {
+ 
+                    return( errorLogService );
+ 
+                }
+            }
+        );
+        
+        
+         joinoutApp.factory(
+            "errorLogService",
+            function( $log, $window, stacktraceService ) {
+ 
+                // I log the given error to the remote server.
+                function log( exception, cause ) {
+ 
+                    // Pass off the error to the default error handler
+                    // on the AngualrJS logger. This will output the
+                    // error to the console (and let the application
+                    // keep running normally for the user).
+                    $log.error.apply( $log, arguments );
+ 
+                    // Now, we need to try and log the error the server.
+                    // --
+                    // NOTE: In production, I have some debouncing
+                    // logic here to prevent the same client from
+                    // logging the same error over and over again! All
+                    // that would do is add noise to the log.
+                    try {
+ 
+                        var errorMessage = exception.toString();
+                        var stackTrace = stacktraceService.print({ e: exception });
+ 
+						alert(errorMessage);
+ 
+                        // Log the JavaScript error to the server.
+                        // --
+                        // NOTE: In this demo, the POST URL doesn't
+                        // exists and will simply return a 404.
+           //             $.ajax({
+           //                 type: "POST",
+           //                 url: "./javascript-errors",
+           //                 contentType: "application/json",
+           //                 data: angular.toJson({
+           //                     errorUrl: $window.location.href,
+           //                     errorMessage: errorMessage,
+           //                     stackTrace: stackTrace,
+           //                     cause: ( cause || "" )
+           //                 })
+           //             });
+ 
+                    } catch ( loggingError ) {
+ 
+                        // For Developers - log the log-failure.
+                        $log.warn( "Error logging failed" );
+                        $log.log( loggingError );
+ 
+                    }
+ 
+                }
+ 
+ 
+                // Return the logging function.
+                return( log );
+ 
+            }
+        );
+        
+        
+        //////////////////////////
+        
+
 joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player) {
+  
+  console.log(errorLogService);
+  
+  $scope.causeError = function() {
+                    var x = y;
+                };
+  
+  
   
   var peerServer;
   $scope.info_message = "To make a call you have to register first !!!";
@@ -57,11 +145,17 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
       $scope.pendingReadRegisteredUsers++;
       $http({
         method: 'GET',
-        url: joinoutServerHost + '/users'
+        url: joinoutServerHost + '/users',
+        timeout: 1000
       }).success(function (data, status, headers, config) {
         $scope.users = data;
       }).error(function (data, status, headers, config) {
         $interval.cancel($scope.readingRegisteredUsersInterval)
+        
+        
+        console.log(config);
+        console.log(status);
+        
         handleError("error code ERR_CONNECTION_TIMED_OUT");
       }).finally(function() {
         $scope.pendingReadRegisteredUsers--;
