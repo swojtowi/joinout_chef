@@ -52,9 +52,10 @@ joinoutApp.provider(
                     try {
  
                         var errorMessage = exception.toString();
-                        var stackTrace = stacktraceService.print({ e: exception });
- 
-						alert(errorMessage);
+                        if (exception instanceof Error) {
+                          var stackTrace = stacktraceService.print({ e: exception });
+                        }
+                        console.log('Sending error: ' + errorMessage + ((angular.isDefined(stackTrace))?(' with stack trace: ' + stackTrace):('')));
  
                         // Log the JavaScript error to the server.
                         // --
@@ -93,8 +94,7 @@ joinoutApp.provider(
         //////////////////////////
         
 
-joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player) {
-  
+joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player, errorLogService) {
   console.log(errorLogService);
   
   $scope.causeError = function() {
@@ -152,9 +152,11 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
       }).error(function (data, status, headers, config) {
         $interval.cancel($scope.readingRegisteredUsersInterval)
         
-        
         console.log(config);
         console.log(status);
+        errorLogService(config);
+        errorLogService(status);
+        
         
         handleError("error code ERR_CONNECTION_TIMED_OUT");
       }).finally(function() {
