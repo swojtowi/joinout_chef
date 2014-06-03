@@ -3,28 +3,16 @@
 <head>
   <meta charset="utf-8">
   <title>JoinOut 0.4 by IMPAQ (in particular by: M2M&amp;CC)</title>
-  <!-- link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" -->
-  
   <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="css/app.css">
   
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-  
-  
   <script src="js/controllers.js"></script>
   <script src="js/directives.js"></script>
-  
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-  
   <script type="text/javascript" src="https://github.com/downloads/stacktracejs/stacktrace.js/stacktrace-min-0.4.js"></script>
-  
   <script type="text/javascript" src="http://cdn.peerjs.com/0.3/peer.js"></script>
-  <script>
-	// Compatibility shim
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-  </script>
   <script type="text/ng-template" id="messageDialog.html">
     <div class="modal-header">
       <h3 class="modal-title">{{title}}</h3>
@@ -70,7 +58,6 @@
 		</div>
 	</div>
   
-  
 	<!-- Informacja o zarejestrowanym uzytkowniku -->
   	<div id="joinout_registered" class="joinout_registered">
 		<div ng-show="registered_user_name">
@@ -78,6 +65,10 @@
 		</div>
 	</div>
 	
+	<!-- my video div -->
+	<div id="my_video_div" class="my_video_div">
+		<video id="my-video" style="width: 200px; height: 200px;" muted="true" autoplay></video>
+	</div>
 	
 	<!-- Informacja o liscie kontaktow -->
 	<div id="joinout_contact_list" class="joinout_contact_list">
@@ -88,7 +79,6 @@
 		</ul>
 	</div>
 
-
 	<!-- control buttons -->
 	<div id="control_buttons" class="control_buttons" >
 		<div id="inCallDiv">
@@ -98,18 +88,10 @@
 		</div>
 	</div>
 	
-	
 	<div id="in_call_info" class="in_call_info">
 		{{info_message}}
-		<!-- Rozmowa z: <span id="their-id">...</span>   -->
 	</div>
 
-
-	<!-- my video div -->
-	<div id="my_video_div" class="my_video_div">
-		<video id="my-video" style="width: 200px; height: 200px;" muted="true" autoplay></video>
-	</div>
-	
 	<!-- their video div -->
 	<div id="their_video_div" class="their_video_div">
 		<video style="width: 800px; height: 600px;" id="their-video" autoplay></video>

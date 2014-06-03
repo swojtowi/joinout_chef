@@ -1,18 +1,10 @@
 var joinoutServerHost = "http://54.245.236.20/api";
-//var joinoutServerHost = "http://54.245.236.20:8080";
 var stunTurnServerHost = "54.245.236.20";
 var peerJsServerHost = "54.245.236.20";
 var peerJsServerPort = 80;
-//var peerJsServerPort = 9000;
-//var peerJsServerPath = 'peerjs';
 var peerJsServerPath = '';
 
 var joinoutApp = angular.module('joinoutApp',['ui.bootstrap']);
-
-// przydatne zmienne
-// $scope.registered_user_id 
-// $scope.peerServer
-
 
 joinoutApp.factory("stacktraceService",function() {
 	return({  print: printStackTrace  });   }
@@ -197,7 +189,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		
 	$scope.finishACall = function() {
 		window.existingCall.close();
-                player.stop();
+        player.stop();
 		$scope.info_message="To make a call click on link";
 		$scope.hideInCallDiv();	
 	};		
@@ -226,6 +218,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	$scope.enableUserMedia = function() {
 
 		// Get audio/video stream
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 		navigator.getUserMedia({audio: true, video: true}, function(stream){
         
 			// Set your video displays
@@ -233,7 +226,11 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			window.localStream = stream;
 			$('#smileAndHairDiv').show();
 				
-		}, function(){ handleError("EnableUserMedia error."); });
+		}, function(e){ 
+			//console.log(e);
+			errorLogService(e);
+			handleError("EnableUserMedia error."); 
+		});
    
 	};
 		
@@ -273,15 +270,6 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			$('#their-video').prop('src', '');
 		});
 		
-		
-		
-//    call.on('close', function () {
-//      if ($('#their-video').prop('src') == URL.createObjectURL(stream)) {
-//        player.stop();
-//        handleMessage('Your call has been rejected!', 'Rejected call');
-//      }
-//      $scope.hideInCallDiv();
-//    });
 	};
 		
 	$scope.withoutMeFilter = function(user) {
