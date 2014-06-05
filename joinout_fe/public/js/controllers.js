@@ -240,20 +240,32 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	$scope.enableUserMedia = function() {
 
 		// Get audio/video stream
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-		navigator.getUserMedia({audio: true, video: true}, function(stream){
-        
-			// Set your video displays
-			$('#my-video').prop('src', URL.createObjectURL(stream));
-			window.localStream = stream;
-			$('#smileAndHairDiv').show();
-				
-		}, function(e){ 
-			//console.log(e);
-			errorLogService(e);
-			handleError("EnableUserMedia error."); 
-		});
-   
+		navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+		if (navigator.getUserMedia) {
+		   navigator.getUserMedia (
+			  // constraints
+			  {
+				 video: true,
+				 audio: true
+			  },
+			  // successCallback
+			  function(localMediaStream) {
+				// Set your video displays
+				$('#my-video').prop('src', URL.createObjectURL(localMediaStream));
+				window.localStream = stream;
+				$('#smileAndHairDiv').show();
+			  },
+			  // errorCallback
+			  function(err) {
+				 console.log("The following error occured: " + err);
+				 errorLogService(err);
+				 handleError("EnableUserMedia error.");
+			  }
+		   );
+		} else {
+		   console.log("getUserMedia not supported");
+		   handleError("EnableUserMedia error.");
+		}
 	};
 		
 	$scope.handleCall = function(call) {
