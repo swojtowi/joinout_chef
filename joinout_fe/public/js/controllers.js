@@ -262,25 +262,13 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 
 		// Wait for stream on the call, then set peer video display
 		call.on('stream', function(stream) {
+			console.log("<< call on stream occured");
 			$('#their-video').prop('src', URL.createObjectURL(stream));
 			player.stop();
 		});
 
-
-		// Wait for stream on the call, then set peer video display
-		call.on('disconnect', function(id) {
-			console.log("Stream disconnected.");
-		});
-		
-
-		// UI stuff
-		$scope.showInCallDiv();
-		window.existingCall = call;
-		
-		 $scope.info_message = "Currently in call with: "+call.peer;
-      
 		call.on('close', function(){
-			
+			console.log("<< call on close occured");
 			// hide some div
 			$scope.info_message="To make a call click on link";
 			$('#inCallDiv').hide();
@@ -288,6 +276,16 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			// clean video
 			$('#their-video').prop('src', '');
 		});
+		
+		
+		call.on('error', function(err) {
+			console.log("<< call on error occured -> error_type: " + err.type");
+		});
+		
+		// UI stuff
+		$scope.showInCallDiv();
+		window.existingCall = call;
+		$scope.info_message = "Currently in call with: "+call.peer;
 		
 	};
 		
@@ -318,8 +316,8 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		
 	// poll server every 10 sec  (expressed in miliseconds)
 	$scope.readRegisteredUsers();
-  $scope.readingRegisteredUsersInterval = $interval($scope.readRegisteredUsers, 10000);
-  $scope.$on('$destroy', function() {
+	$scope.readingRegisteredUsersInterval = $interval($scope.readRegisteredUsers, 10000);
+	$scope.$on('$destroy', function() {
     $interval.cancel($scope.readingRegisteredUsersInterval);
   });
   
