@@ -279,7 +279,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		
 		
 		call.on('error', function(err) {
-			console.log("<< call on error occured -> error_type: " + err.type");
+			console.log("<< call on error occured -> error_type: " + err.type);
 		});
 		
 		// UI stuff
