@@ -133,45 +133,60 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			]}
 		});
 		
+		
 		$scope.peerServer.on('open', function(){
-		  $('#my-id').text($scope.peerServer.id);
+			console.log("<< peerServer on open occured");
+			$('#my-id').text($scope.peerServer.id);
 		});
 		
-    // Receiving a call
+    
+    
+		// Receiving a call
 		$scope.peerServer.on('call', function(call) {
-      
-      player.setSound(player.sounds.PHONE_RINGING);
-      player.play();
-      var incomingCallDialogInstance = $modal.open({
-        templateUrl: 'incomingCallDialog.html',
-        controller: 'IncomingCallDialogCtrl',
-        resolve: {
-          caller: function () {
-            return 'UNKNOWN';
-          }
-        }
-      });
-      incomingCallDialogInstance.result.then(function (result) {
-		  
-		  // Update last_activity_date
-		$scope.updateLastActivityDate();
-		  
-        if (result.accepted) {
-          call.answer(window.localStream);
-          $scope.handleCall(call);	
-        } else {
-          console.log('You have rejected the call!');
-        }
-        player.stop();
-      });
-    });
+			console.log("<< peerServer on call occured");
+			player.setSound(player.sounds.PHONE_RINGING);
+			player.play();
+			var incomingCallDialogInstance = $modal.open({
+				templateUrl: 'incomingCallDialog.html',
+				controller: 'IncomingCallDialogCtrl',
+				resolve: {
+					caller: function () {
+						return 'UNKNOWN';
+					}
+				}
+			});
+			
+			incomingCallDialogInstance.result.then(function (result) {
+				// Update last_activity_date
+				$scope.updateLastActivityDate();
+			  
+				if (result.accepted) {
+					call.answer(window.localStream);
+					$scope.handleCall(call);	
+				} else {
+					console.log('You have rejected the call!');
+				}
+				player.stop();
+			});
+		});
+    
     
 		$scope.peerServer.on('error', function(err){
-			
+			console.log("<< peerServer on error occured -> error_type: " + err.type);
 			handleError(err.message);
 			$scope.hideInCallDiv();
-      player.stop();
-		});		
+			player.stop();
+		});	
+		
+		
+		$scope.peerServer.on('connection', function(){
+			console.log("<< peerServer on connection occured");
+		});	
+		
+		
+		$scope.peerServer.on('close', function(){
+			console.log("<< peerServer on close occured");
+		});	
 		
 	};
 		
@@ -184,6 +199,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		
 		// Initiate a call!
         var call = $scope.peerServer.call(user.user_id, window.localStream);
+        console.log("<< peerServer call occured");
         $scope.handleCall(call);	
 	};
 		
@@ -195,24 +211,27 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	};		
 
 	$scope.muteUnmuteAudio = function() {
-		if(window.existingCall.localStream.getAudioTracks()[0].enabled){
-			window.existingCall.localStream.getAudioTracks()[0].enabled = false;
-			$scope.muteUnmuteAudioLabel = "Audio on";
-		} else {
-			window.existingCall.localStream.getAudioTracks()[0].enabled = true;
-			$scope.muteUnmuteAudioLabel = "Audio off";
+		if (window.existingCall.localStream.getAudioTracks()[0] !== undefined) {
+			if(window.existingCall.localStream.getAudioTracks()[0].enabled){
+				window.existingCall.localStream.getAudioTracks()[0].enabled = false;
+				$scope.muteUnmuteAudioLabel = "Audio on";
+			} else {
+				window.existingCall.localStream.getAudioTracks()[0].enabled = true;
+				$scope.muteUnmuteAudioLabel = "Audio off";
+			}
 		}
 	};
 	
 	$scope.muteUnmuteVideo = function() {
-		if(window.existingCall.localStream.getVideoTracks()[0].enabled){
-			window.existingCall.localStream.getVideoTracks()[0].enabled = false;
-			$scope.muteUnmuteVideoLabel = "Video on";
-		} else {
-			window.existingCall.localStream.getVideoTracks()[0].enabled = true;
-			$scope.muteUnmuteVideoLabel = "Video off";
+		if (window.existingCall.localStream.getVideoTracks()[0] !== undefined) {
+			if(window.existingCall.localStream.getVideoTracks()[0].enabled){
+				window.existingCall.localStream.getVideoTracks()[0].enabled = false;
+				$scope.muteUnmuteVideoLabel = "Video on";
+			} else {
+				window.existingCall.localStream.getVideoTracks()[0].enabled = true;
+				$scope.muteUnmuteVideoLabel = "Video off";
+			}
 		}
-		
 	};
 		
 	$scope.enableUserMedia = function() {
