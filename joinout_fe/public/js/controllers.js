@@ -188,6 +188,9 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			console.log("<< peerServer on close occured");
 		});	
 		
+		$scope.peerServer.on('disconnect', function(){
+			console.log("<< peerServer on disconnect occured");
+		});	
 	};
 		
 	$scope.makeACall = function(user) {
