@@ -386,29 +386,34 @@ joinoutApp.factory('player', function(audio, $rootScope) {
   player = {
     sounds: {
       PHONE_CALLING: {
-        url: 'audio/phone-calling.mp3'
-      }, PHONE_RINGING: {
-        url: 'audio/phone-ringing.mp3'
+        sources: [
+          {src: 'audio/phone-calling.mp3', type: 'audio/mpeg'},
+//          {src: 'audio/phone-calling.ogg', type: 'audio/ogg'},
+//          {src: 'audio/phone-calling.wav', type: 'audio/wav'}
+        ]
+      },
+      PHONE_RINGING: {
+        sources: [
+          {src: 'audio/phone-ringing.mp3', type: 'audio/mpeg'},
+//          {src: 'audio/phone-ringing.ogg', type: 'audio/ogg'},
+//          {src: 'audio/phone-ringing.wav', type: 'audio/wav'}
+        ]
       }
     },
-    media: {
-      url: null
-    },
     playing: false,
-    play: function(track, album) {
-      if (!paused && this.media.url) audio.src = this.media.url;
+    play: function (track, album) {
       audio.play();
       player.playing = true;
       paused = false;
     },
-    pause: function() {
+    pause: function () {
       if (player.playing) {
         audio.pause();
         player.playing = false;
         paused = true;
       }
     },
-    stop: function() {
+    stop: function () {
       if (player.playing) {
         audio.pause();
         audio.load();
@@ -416,8 +421,23 @@ joinoutApp.factory('player', function(audio, $rootScope) {
         paused = false;
       }
     },
-    setSound: function(sound) {
-      this.media.url = sound.url;
+    setSound: function (sound) {
+      player.removeAudioSources();
+      player.appendAudioSources(sound.sources);
+    },
+    removeAudioSources: function () {
+      angular.element(audio).find('source').remove();
+    },
+    appendAudioSources: function (soundSources) {
+      angular.forEach(soundSources, function (soundSource) {
+        angular.element(audio).append(player.getAudioSourceTag(soundSource));
+      });
+    },
+    getAudioSourceTag: function (soundSource) {
+      var source = angular.element('<source />');
+      source.attr('src', soundSource.src);
+      source.attr('type', soundSource.type);
+      return source;
     }
   };
   
