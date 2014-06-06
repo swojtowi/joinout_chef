@@ -388,14 +388,14 @@ joinoutApp.factory('player', function(audio, $rootScope) {
       PHONE_CALLING: {
         sources: [
           {src: 'audio/phone-calling.mp3', type: 'audio/mpeg'},
-//          {src: 'audio/phone-calling.ogg', type: 'audio/ogg'},
+          {src: 'audio/phone-calling.ogg', type: 'audio/ogg'}
 //          {src: 'audio/phone-calling.wav', type: 'audio/wav'}
         ]
       },
       PHONE_RINGING: {
         sources: [
           {src: 'audio/phone-ringing.mp3', type: 'audio/mpeg'},
-//          {src: 'audio/phone-ringing.ogg', type: 'audio/ogg'},
+          {src: 'audio/phone-ringing.ogg', type: 'audio/ogg'}
 //          {src: 'audio/phone-ringing.wav', type: 'audio/wav'}
         ]
       }
