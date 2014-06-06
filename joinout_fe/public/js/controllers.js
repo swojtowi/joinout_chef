@@ -252,7 +252,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			  function(localMediaStream) {
 				// Set your video displays
 				$('#my-video').prop('src', URL.createObjectURL(localMediaStream));
-				window.localStream = stream;
+				window.localStream = localMediaStream;
 				$('#smileAndHairDiv').show();
 			  },
 			  // errorCallback
