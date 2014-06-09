@@ -74,8 +74,8 @@
 	<div id="joinout_contact_list" class="joinout_contact_list">
 		<legend>Contact list</legend>
 		<ul>
-			<span ng-if="registered_user_name"><li ng-repeat="user in users | filter:withoutMeFilter">	<a href="#" ng-click="makeACall(user)">{{user.user_name}}</a> </li>	</span>
-			<span ng-if="!registered_user_name"><li ng-repeat="user in users | filter:withoutMeFilter">	{{user.user_name}} </li></span>
+			<span ng-if="isCallReady()"><li ng-repeat="user in users | filter:withoutMeFilter">	<a href="#" ng-click="makeACall(user)">{{user.user_name}}</a> </li>	</span>
+			<span ng-if="!isCallReady()"><li ng-repeat="user in users | filter:withoutMeFilter">	{{user.user_name}} </li></span>
 		</ul>
 	</div>
 

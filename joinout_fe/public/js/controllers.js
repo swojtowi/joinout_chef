@@ -60,35 +60,44 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
   
   $scope.muteUnmuteAudioLabel = "Audio off";
   $scope.muteUnmuteVideoLabel = "Video off";
-
+  
   $scope.registerNewUser = function() {
 	$rootScope.$broadcast('loader_show');
+	
+	var generated_double_id = Math.random();
+	var generated_string_id = generated_double_id.toString().replace(".", "");
+
+
+	// enable user media
+	$scope.enableUserMedia();
+	
+	// register in PeerJS
+//	if(window.localStream){
+		$scope.createPeerServerConnection(generated_string_id);
 		
-		var generated_double_id = Math.random();
-		var generated_string_id = generated_double_id.toString().replace(".", "");
-		
+		// register in Joinout Server
 		var positionInJson = angular.toJson({
 			user_name: $scope.userName,
 			user_id: generated_string_id
-		});
+		});		
+		
+		$http({
+		  method: 'POST',
+		  url: joinoutServerHost + '/users',
+		  data: JSON.stringify(positionInJson)
+		}).success(function(data, status, headers, config) {
+		  $scope.registered_user_name = data.user_name;
+		  $scope.registered_user_id = data.user_id;
+		  $scope.readRegisteredUsers();
+		  $rootScope.$broadcast('loader_hide');
+		  $scope.info_message = "To make a call click on link";
+		}).error(function(data, status, headers, config) {
+		  $rootScope.$broadcast('loader_hide');
+		  handleError("Registration error. Please try later.");
+		  $scope.reportError(data, status, headers, config);
+		});		
+//	}
 
-    $http({
-      method: 'POST',
-      url: joinoutServerHost + '/users',
-      data: JSON.stringify(positionInJson)
-    }).success(function(data, status, headers, config) {
-      $scope.registered_user_name = data.user_name;
-      $scope.registered_user_id = data.user_id;
-      $scope.readRegisteredUsers();
-      $scope.createPeerServerConnection();
-      $scope.enableUserMedia();
-      $rootScope.$broadcast('loader_hide');
-      $scope.info_message = "To make a call click on link";
-    }).error(function(data, status, headers, config) {
-      $rootScope.$broadcast('loader_hide');
-      handleError("Registration error. Please try later.");
-      $scope.reportError(data, status, headers, config);
-    });
   };
   
   $scope.pendingReadRegisteredUsers = 0;
@@ -123,10 +132,10 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
             });
 	};
 		
-	$scope.createPeerServerConnection = function() {
+	$scope.createPeerServerConnection = function(userId) {
 				
 		// PeerJS object
-		$scope.peerServer = new Peer($scope.registered_user_id , {host: peerJsServerHost, port: peerJsServerPort, path: peerJsServerPath, debug:3, 
+		$scope.peerServer = new Peer(userId , {host: peerJsServerHost, port: peerJsServerPort, path: peerJsServerPath, debug:3, 
 			config: {'iceServers': [
 			 {	url: 'turn:'+stunTurnServerHost+':3478',		credential: 'youhavetoberealistic',		username: 'ninefingers'		},
 			 {	url: 'stun:'+stunTurnServerHost+':3478',		credential: 'youhavetoberealistic',		username: 'ninefingers'		}
@@ -194,8 +203,9 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	};
 		
 	$scope.makeACall = function(user) {
-    player.setSound(player.sounds.PHONE_CALLING);
-    player.play();
+    
+		player.setSound(player.sounds.PHONE_CALLING);
+		player.play();
 		
 		// Update last_activity_date
 		$scope.updateLastActivityDate();
@@ -264,7 +274,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 		   );
 		} else {
 		   console.log("getUserMedia not supported");
-		   handleError("EnableUserMedia error.");
+		   handleError("EnableUserMedia error.");	
 		}
 	};
 		
@@ -328,6 +338,15 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
         };
 		errorLogService(JSON.stringify(e));
 	}
+	
+	$scope.isCallReady = function(){
+		if($scope.registered_user_name){
+			if(window.localStream){
+				return true;
+			}
+		}
+		return false;
+	}; 
 		
 	// poll server every 10 sec  (expressed in miliseconds)
 	$scope.readRegisteredUsers();
