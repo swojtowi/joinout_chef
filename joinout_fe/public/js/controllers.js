@@ -53,7 +53,7 @@ joinoutApp.factory("errorLogService", function( $log, $window, stacktraceService
 } );
         
 
-joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, player, errorLogService) {
+joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $interval, $modal, $q, player, errorLogService) {
   
   var peerServer;
   $scope.info_message = "To make a call you have to register first !!!";
@@ -62,42 +62,40 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
   $scope.muteUnmuteVideoLabel = "Video off";
   
   $scope.registerNewUser = function() {
-	$rootScope.$broadcast('loader_show');
+    $rootScope.$broadcast('loader_show');
 	
-	var generated_double_id = Math.random();
-	var generated_string_id = generated_double_id.toString().replace(".", "");
+    var generated_double_id = Math.random();
+    var generated_string_id = generated_double_id.toString().replace(".", "");
 
+    // enable user media
+    $scope.enableUserMedia().then(function() {
+      if(window.localStream){
+        // register in PeerJS
+        $scope.createPeerServerConnection(generated_string_id);
 
-	// enable user media
-	$scope.enableUserMedia();
-	
-	// register in PeerJS
-//	if(window.localStream){
-		$scope.createPeerServerConnection(generated_string_id);
-		
-		// register in Joinout Server
-		var positionInJson = angular.toJson({
-			user_name: $scope.userName,
-			user_id: generated_string_id
-		});		
-		
-		$http({
-		  method: 'POST',
-		  url: joinoutServerHost + '/users',
-		  data: JSON.stringify(positionInJson)
-		}).success(function(data, status, headers, config) {
-		  $scope.registered_user_name = data.user_name;
-		  $scope.registered_user_id = data.user_id;
-		  $scope.readRegisteredUsers();
-		  $rootScope.$broadcast('loader_hide');
-		  $scope.info_message = "To make a call click on link";
-		}).error(function(data, status, headers, config) {
-		  $rootScope.$broadcast('loader_hide');
-		  handleError("Registration error. Please try later.");
-		  $scope.reportError(data, status, headers, config);
-		});		
-//	}
+        // register in Joinout Server
+        var positionInJson = angular.toJson({
+          user_name: $scope.userName,
+          user_id: generated_string_id
+        });		
 
+        $http({
+          method: 'POST',
+          url: joinoutServerHost + '/users',
+          data: JSON.stringify(positionInJson)
+        }).success(function(data, status, headers, config) {
+          $scope.registered_user_name = data.user_name;
+          $scope.registered_user_id = data.user_id;
+          $scope.readRegisteredUsers();
+          $rootScope.$broadcast('loader_hide');
+          $scope.info_message = "To make a call click on link";
+        }).error(function(data, status, headers, config) {
+          $rootScope.$broadcast('loader_hide');
+          handleError("Registration error. Please try later.");
+          $scope.reportError(data, status, headers, config);
+        });		
+      }
+    });
   };
   
   $scope.pendingReadRegisteredUsers = 0;
@@ -248,6 +246,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 	};
 		
 	$scope.enableUserMedia = function() {
+    var deferred = $q.defer();
 
 		// Get audio/video stream
 		navigator.getUserMedia = ( navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -260,22 +259,27 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
 			  },
 			  // successCallback
 			  function(localMediaStream) {
-				// Set your video displays
-				$('#my-video').prop('src', URL.createObjectURL(localMediaStream));
-				window.localStream = localMediaStream;
-				$('#smileAndHairDiv').show();
+          // Set your video displays
+          $('#my-video').prop('src', URL.createObjectURL(localMediaStream));
+          window.localStream = localMediaStream;
+          $('#smileAndHairDiv').show();
+          deferred.resolve();
 			  },
 			  // errorCallback
 			  function(err) {
 				 console.log("The following error occured: " + err);
 				 errorLogService(err);
 				 handleError("EnableUserMedia error.");
+         $rootScope.$broadcast('loader_hide');
+         deferred.reject();
 			  }
 		   );
 		} else {
 		   console.log("getUserMedia not supported");
 		   handleError("EnableUserMedia error.");	
 		}
+    
+    return deferred.promise;
 	};
 		
 	$scope.handleCall = function(call) {
