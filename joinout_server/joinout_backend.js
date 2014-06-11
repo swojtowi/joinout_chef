@@ -26,6 +26,17 @@ var Call = new Schema({
 });
 var CallModel = mongoose.model('Call', Call); 
 
+
+var ClientError = new Schema({  
+    errorUrl: { type: String},  
+    errorMessage: { type: String },  
+    stackTrace: { type: String },
+    cause: { type: String },
+    errorTimestamp: { type: Date, default: Date.now }
+});
+var ClientErrorModel = mongoose.model('ClientError', ClientError); 
+
+
 // create a server
 var restify = require('restify'),
     server = restify.createServer({
@@ -148,6 +159,39 @@ server.post('/calls/:origid/:termid', function (req, res){
 	  return res.send(call);
 });
 
+
+// Store error logs
+//curl -i -X POST  http://localhost:8080/errors -d '{ "errorUrl":"http://www.wp.pl", "errorMessage":"File not found","stackTrace":"Some stacktrace","cause":"Some cause"}'
+server.post('/errors', function (req, res){
+	  var json = JSON.parse(req.body);
+
+	  client_err = ClientErrorModel({
+		  errorUrl:json.errorUrl,  
+		  errorMessage:json.errorMessage,  
+		  stackTrace:json.stackTrace,  
+		  cause:json.cause
+	  });
+	  client_err.save(function (err) {
+	    if (!err) {
+	      return console.log("Client Error logged");
+	    } else {
+	      return console.log(err);
+	    }
+	  });
+	  return res.send(client_err);
+});
+
+// GET all errors
+//curl http://localhost:8080/errors
+server.get('/errors', function (req, res){
+  return ClientErrorModel.find(function (err, client_err) {
+    if (!err) {
+      return res.send(client_err);
+    } else {
+      return console.log(err);
+    }
+  });
+});
 
 server.listen(port);
 console.log('Starting Joinout Backend on port: ' + port);
