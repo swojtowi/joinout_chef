@@ -11,7 +11,7 @@ mongoose.connect('mongodb://localhost/test');
 var Schema = mongoose.Schema;  
 var User = new Schema({  
     user_id: { type: String, required: true },  
-    user_name: { type: String, unique: true },  
+    user_name: { type: String },  
     user_creation_date: { type: Date, default: Date.now },
     user_last_activity_date: { type: Date, required: true }
 });
