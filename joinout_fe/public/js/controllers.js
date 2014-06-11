@@ -22,7 +22,7 @@ joinoutApp.factory("errorLogService", function( $log, $window, stacktraceService
 	function log( exception, cause ) {
 		$log.error.apply( $log, arguments );
 	
-		console.log(exception);
+//		console.log(exception);
 	
 			try {
 				var errorMessage = exception.toString();
@@ -32,17 +32,17 @@ joinoutApp.factory("errorLogService", function( $log, $window, stacktraceService
 					
               //      console.log('Sending error: ' + errorMessage + ((angular.isDefined(stackTrace))?(' with stack trace: ' + stackTrace):('')));
  
-           //             $.ajax({
-           //                 type: "POST",
-           //                 url: "./javascript-errors",
-           //                 contentType: "application/json",
-           //                 data: angular.toJson({
-           //                     errorUrl: $window.location.href,
-           //                     errorMessage: errorMessage,
-           //                     stackTrace: stackTrace,
-           //                     cause: ( cause || "" )
-           //                 })
-           //             });
+                        $.ajax({
+                            type: "POST",
+                            url: joinoutServerHost+"/errors",
+                        //    contentType: "application/json",
+                            data: angular.toJson({
+                                errorUrl: $window.location.href,
+                                errorMessage: errorMessage,
+                                stackTrace: stackTrace,
+                                cause: ( cause || "" )
+                            })
+                        });
  
 			} catch ( loggingError ) {
 				$log.warn( "Error logging failed" );
@@ -106,6 +106,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
       $http({
         method: 'GET',
         //timeout: 1000,
+        //url: "http://54.245.236.21/api" + '/users'
         url: joinoutServerHost + '/users'
       }).success(function (data, status, headers, config) {
         $scope.users = data;
