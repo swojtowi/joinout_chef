@@ -64,8 +64,7 @@ joinoutApp.controller('MainCtrl', function($rootScope, $scope, $filter, $http, $
   $scope.registerNewUser = function() {
     $rootScope.$broadcast('loader_show');
 	
-    var generated_double_id = Math.random();
-    var generated_string_id = generated_double_id.toString().replace(".", "");
+    var generated_string_id = (Math.random().toString(36) + '0000000000000000000').substr(2, 16);
 
     // enable user media
     $scope.enableUserMedia().then(function() {
