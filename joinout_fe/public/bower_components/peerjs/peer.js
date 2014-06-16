@@ -2636,6 +2636,9 @@ Socket.prototype.send = function(data) {
   }
 
   var message = JSON.stringify(data);
+  /////
+  console.log(message);
+  /////
   if (this._wsOpen()) {
     this._socket.send(message);
   } else {
