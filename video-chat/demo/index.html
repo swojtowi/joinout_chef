@@ -1,43 +1,72 @@
 <html>
 <head>
-  <title>PeerJS - Video chat example</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="text/javascript" src="video-chat.js"></script>
+    <title>Video chat example</title>
 </head>
 
 <body>
 
-  <div class="pure-g">
+<script type="text/javascript">
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = 'video-chat.min.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script>
 
-      <!-- Video area -->
-      <div class="pure-u-2-3" id="video-container">
-        <video id="their-video" autoplay></video>
+<style>
+    #my-video {
+        margin-top: 5%;
+        margin-left: 2%;
+        width: 25%;
+        height: auto;
+        position: absolute;
+        z-index: 1;
+    }
+</style>
+<style>
+    #their-video {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+</style>
+<style>
+    #video-container, #steps, #container {
+        position: relative;
+    }
+</style>
+<div id="container">
+    <div id="video-container">
         <video id="my-video" muted="true" autoplay></video>
-      </div>
-
-      <!-- Steps -->
-      <div class="pure-u-1-3">
-        <!-- Get local audio/video stream -->
+        <video id="their-video" autoplay></video>
+    </div>
+    <div id="steps">
+        <div id="step0">
+            <p>Initial information</p>
+            <a href="#" id="step0-try">Try video chat</a>
+        </div>
         <div id="step1">
-          <p>Please click `allow` on the top of the screen so we can access your webcam and microphone for calls.</p>
-          <div id="step1-error">
-            <p>Failed to access the webcam and microphone. Make sure to run this demo on an http server and click allow when asked for permission by the browser.</p>
-            <a href="#" class="pure-button pure-button-error" id="step1-retry">Try again</a>
-          </div>
-        </div>
+            <p>Please click `allow` on the top of the screen so we can access your webcam and microphone for calls.</p>
 
-        <!-- Make calls to others -->
+            <div id="step1-error">
+                <p>Failed to access the webcam and microphone. Make sure to run this demo on an http server and click
+                    allow when asked for permission by the browser.</p>
+                <a href="#" id="step1-retry">Try again</a>
+            </div>
+        </div>
         <div id="step2">
-          <p>Share this link with others to make a call.</p>
-          <span id="share-link">http://localhost:8081/videochat/?caller-id=<span id="my-id"></span></span>
+            <p>Share this link with others to make a call.</p>
+            <span id="share-link">http://localhost:8081/videochat/?caller-id=<span id="my-id"></span></span>
         </div>
-
-        <!-- Call in progress -->
         <div id="step3">
-          <p>Currently in call with <span id="their-id">...</span></p>
-          <p><a href="#" class="pure-button pure-button-error" id="end-call">End call</a></p>
+            <p>Currently in call with <span id="their-id">...</span></p>
+
+            <p><a href="#" id="end-call">End call</a></p>
         </div>
-      </div>
-  </div>
+    </div>
+</div>
 </body>
 </html>

@@ -6,3 +6,5 @@ node_modules
 video-chat/bower_components/
 video-chat/node_modules/
 video-chat/dist/
+*.iml
+.idea

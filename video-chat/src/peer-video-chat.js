@@ -11,7 +11,10 @@ var peer = new Peer({ host: peerJsServerHost, port: peerJsServerPort, path: peer
         {url: 'stun:' + stunTurnServerHost + ':3478', credential: 'youhavetoberealistic', username: 'ninefingers'}
     ]}
 });
-$('#their-video, #step1-error, #step2, #step3').hide();
+
+var callerId = '';
+
+$('#my-video, #their-video, #step1-error, #step1, #step2, #step3').hide();
 
 
 peer.on('open', function () {
@@ -49,23 +52,37 @@ $(function () {
         step1();
     });
 
-    // Get things started
-    step1();
+    $('#step0-try').click(function () {
+        step1();
+    });
+
+    getCallerId();
+
 });
 
+function getCallerId() {
+    var caller = getUrlVars()["caller-id"];
+    if (caller != undefined && caller != null && caller.length > 0) {
+        callerId = caller;
+        step1();
+    }
+}
+
 function step1() {
+    $('#step0').hide();
+    $('#step1').show();
     // Get audio/video stream
     navigator.getUserMedia({audio: true, video: true}, function (stream) {
         // Set your video displays
         $('#my-video').prop('src', URL.createObjectURL(stream));
-
         window.localStream = stream;
-        var theirId = getUrlVars()["caller-id"];
-        if (theirId === undefined || theirId === null) {
-            step2();
+        $('#my-video, #their-video').show();
+        if (callerId) {
+            step3(peer.call(callerId, window.localStream));
         } else {
-            step3(peer.call(theirId, window.localStream));
+            step2();
         }
+
     }, function () {
         $('#step1-error').show();
     });
@@ -73,12 +90,10 @@ function step1() {
 
 function step2() {
     $('#step1, #step3').hide();
-    $('#their-video').hide();
     $('#step2').show();
 }
 
 function step3(call) {
-    $('#their-video').show();
     // Hang up on an existing call if present
     if (window.existingCall) {
         window.existingCall.close();
