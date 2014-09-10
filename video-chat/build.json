@@ -1,0 +1,10 @@
+{
+	"name" : "video-chat",
+	"version" : "0.0.1",
+	"description" : "",
+	"url" : "",
+	"output" : "video-chat",
+	"main" : [
+		"src/peer-video-chat.js"
+	]
+}

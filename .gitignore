@@ -3,3 +3,6 @@ node_modules
 .project
 *.log
 /joinout_fe/nbproject
+video-chat/bower_components/
+video-chat/node_modules/
+video-chat/dist/
