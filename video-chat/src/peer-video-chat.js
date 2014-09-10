@@ -1,3 +1,4 @@
+setupCss();
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 // PeerJS object
@@ -14,7 +15,27 @@ var peer = new Peer({ host: peerJsServerHost, port: peerJsServerPort, path: peer
 
 var callerId = '';
 
-$('#my-video, #their-video, #step1-error, #step1, #step2, #step3').hide();
+
+function setupCss() {
+    $('#my-video, #their-video, #step1-error, #step1, #step2, #step3').hide();
+
+    $('#my-video').css({
+        'margin-top': '5%',
+        'margin-left': '2%',
+        'width': '25%',
+        'height': 'auto',
+        'position': 'absolute',
+        'z-index': '1'
+    });
+
+    $('#their-video').css({
+        'width': '100%',
+        'height': 'auto',
+        'position': 'relative'
+    });
+
+    $('#video-container, #steps, #container').css('position', 'relative');
+}
 
 
 peer.on('open', function () {
