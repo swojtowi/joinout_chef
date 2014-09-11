@@ -12,9 +12,38 @@ var peer = new Peer({ host: peerJsServerHost, port: peerJsServerPort, path: peer
         {url: 'stun:' + stunTurnServerHost + ':3478', credential: 'youhavetoberealistic', username: 'ninefingers'}
     ]}
 });
-
+var joinOutUrl = 'http://localhost:8081/videochat/';
 var callerId = '';
 
+var m = new mandrill.Mandrill('_GOTqJdEBF7YdkfGLS-qXg');
+
+function log(obj) {
+    console.log(JSON.stringify(obj));
+};
+
+
+function getShareLink() {
+    return joinOutUrl + '?caller-id=' + peer.id;
+}
+
+function sendMail(to) {
+    m.messages.send(createEmailParams(to), function(res) {
+        log(res);
+    }, function(err) {
+        log(err);
+    });
+};
+
+function createEmailParams(to) {
+    return {
+        "message": {
+            "from_email":"info@joinout.pl",
+            "to":[{"email":to}],
+            "subject": "Video Chat link",
+            "text": "Join video chat: " + getShareLink()
+        }
+    };
+}
 
 function setupCss() {
     $('#my-video, #their-video, #step1-error, #step1, #step2, #step3').hide();
@@ -39,7 +68,7 @@ function setupCss() {
 
 
 peer.on('open', function () {
-    $('#my-id').text(peer.id);
+    $('#share-link').text(getShareLink());
 });
 
 // Receiving a call
@@ -76,6 +105,12 @@ $(function () {
     $('#step0-try').click(function () {
         step1();
     });
+
+    $('#send-mail-link').click(function () {
+        sendMail($('#send-mail-link-to').val());
+    });
+
+
 
     getCallerId();
 

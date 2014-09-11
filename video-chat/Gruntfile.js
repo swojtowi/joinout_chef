@@ -1,7 +1,5 @@
 module.exports = function(grunt) {
 
-  require('grunt-library-builder');
-
   grunt.initConfig({
 
     pkg : grunt.file.readJSON('package.json'),
@@ -16,7 +14,7 @@ module.exports = function(grunt) {
         banner: ''
       },
       target : {
-        src : ['dist/video-chat-bower.js','src/lib/peer.min.js', 'src/peer-video-chat.js'],
+        src : ['dist/video-chat-bower.js', 'src/lib/peer.min.js', 'src/peer-video-chat.js'],
         dest : 'dist/video-chat.js'
       }
     },
