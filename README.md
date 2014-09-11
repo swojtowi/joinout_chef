@@ -10,6 +10,8 @@ In instruction below please ensure that you use proper path(s) :)
 
 * joinout_util - contains nginx configuration and cleanning script
 
+* video-chat - contains video-chat lib and demo which is used on http://www.joinout.pl page
+
 ## Installation Guide (on Amazon)
 
 ### Install rfc5766-turn-server on Amazon 
