@@ -1,7 +1,5 @@
 # Video Chat
 
-In instruction below please ensure that you use proper path(s) :)
-
 ## Directory contents:
 
 * demo - example of video chat
@@ -22,10 +20,12 @@ In instruction below please ensure that you use proper path(s) :)
     *cd joinout/video-chat/*
     
     *npm install -g grunt-cli*
+
     *npm install -g bower*
 
 
 3. build library
 
     *bower install*
+
     *grunt*
