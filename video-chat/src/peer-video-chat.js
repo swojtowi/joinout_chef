@@ -12,34 +12,46 @@ var peer = new Peer({ host: peerJsServerHost, port: peerJsServerPort, path: peer
         {url: 'stun:' + stunTurnServerHost + ':3478', credential: 'youhavetoberealistic', username: 'ninefingers'}
     ]}
 });
-var joinOutUrl = 'http://localhost:8081/videochat/';
+var joinOutUrl = 'http://www.joinout.pl/';
 var callerId = '';
 
 var m = new mandrill.Mandrill('_GOTqJdEBF7YdkfGLS-qXg');
 
 function log(obj) {
     console.log(JSON.stringify(obj));
-};
-
+}
 
 function getShareLink() {
     return joinOutUrl + '?caller-id=' + peer.id;
 }
 
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
 function sendMail(to) {
-    m.messages.send(createEmailParams(to), function(res) {
-        log(res);
-    }, function(err) {
-        log(err);
-    });
-};
+    if (validateEmail(to)) {
+        m.messages.send(createEmailParams(to), function (res) {
+            $('#send-mail-link-to').val('');
+            alert("Wiadomosc wyslana / Message sent");
+        }, function (err) {
+            alert("Nie udalo sie wyslac wiadomosci / Message not sent");
+            log(err);
+        });
+    } else {
+        alert("Niepoprawny adres email / Incorrect email address");
+    }
+}
 
 function createEmailParams(to) {
     return {
         "message": {
-            "from_email":"info@joinout.pl",
-            "to":[{"email":to}],
-            "subject": "Video Chat link",
+            "from_email": "JoinOut@joinout.pl",
+            "to": [
+                {"email": to}
+            ],
+            "subject": "Join Video Chat",
             "text": "Join video chat: " + getShareLink()
         }
     };
@@ -109,8 +121,6 @@ $(function () {
     $('#send-mail-link').click(function () {
         sendMail($('#send-mail-link-to').val());
     });
-
-
 
     getCallerId();
 
