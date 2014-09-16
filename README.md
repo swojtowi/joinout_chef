@@ -4,9 +4,9 @@ In instruction below please ensure that you use proper path(s) :)
 
 ## Directory contents:
 
-* joinout_server - contains frontend application
+* joinout_server - contains backend application
 
-* joinout_fe - contains backend application
+* joinout_fe - contains frontend application
 
 * joinout_util - contains nginx configuration and cleanning script
 
