@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+
+cookbook 'wordpress', '>= 2.3.0'
+# cookbook 'hostsfile',	'>= 2.4.2'
+# cookbook 'ark',	'>= 0.4.2'
+# cookbook 'java', '>=1.18.0'
+# cookbook 'sudo', '>=2.3.0'
+# cookbook 'openvz', '>=0.1.0'
+# cookbook 'ntp'
+
+# cookbook 'chef-client'
+
+# cookbook 'apache2', '>= 1.0.0'
+
+# cookbook 'rvm',
+#   :git => 'https://github.com/fnichol/chef-rvm'
+
+# cookbook 'postgresql',
+#   :git => 'https://github.com/findsyou/cookbooks',
+#   :ref => 'postgresql-improvements'
