@@ -5,9 +5,9 @@ license          'All rights reserved'
 description      'Installs/Configures turnserver'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '4.1.2'
-#depends 'openssl'
-depends 'iptables'
-depends 'libevent'
-#depends 'perl-master'
+# depends 'openssl'
+# depends 'iptables'
+# depends 'libevent'
+# depends 'perl-master'
 
 
