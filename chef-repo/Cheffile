@@ -4,6 +4,7 @@
 site 'http://community.opscode.com/api/v1'
 
 cookbook 'wordpress', '>= 2.3.0'
+cookbook 'users', '~> 1.7.0'
 # cookbook 'hostsfile',	'>= 2.4.2'
 # cookbook 'ark',	'>= 0.4.2'
 # cookbook 'java', '>=1.18.0'
