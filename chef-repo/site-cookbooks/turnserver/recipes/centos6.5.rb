@@ -1,19 +1,18 @@
 
-node['directories']['create'].each do |name|
-	execute "mkdir -p #{name}" do
-		action :run
-	end
-end
-=begin
-remote_file "root/rpmbuild/SOURCES/libevent-2.0.21-stable.tar.gz" do
-    source "https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz"
-    action :create
-end
-=end
+
+
+
+# remote_file "root/rpmbuild/SOURCES/libevent-2.0.21-stable.tar.gz" do
+#    source "https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz"
+#    action :create
+# end
+
+
 
 remote_file "#{Chef::Config[:file_cache_path]}epel-release-6-8.noarch.rpm" do
     source "http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm"
     action :create
+     not_if { File.exists? "#{Chef::Config[:file_cache_path]}epel-release-6-8.noarch.rpm" }
 end
 
 rpm_package "epel" do
@@ -25,13 +24,13 @@ end
 remote_file "rpmforge-release-0.5.2-2.el4.rf.x86_64.rpm" do
 	source "http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el4.rf.x86_64.rpm"
 	action :create
+    not_if { File.exists? "rpmforge-release-0.5.2-2.el4.rf.x86_64.rpm" }
 end
 
 execute "rpm -Uvh rpmforge-release-0.5.2-2.el4.rf.x86_64.rpm" do
 	action :run
 	returns [0,1]
 end
-
 
 execute "yum --assumeyes --enablerepo rpmforge install dkms " do
     action :run
@@ -46,53 +45,18 @@ node['centos6.5']['packages'].each do |name|
         action :install
     end
 end
-=begin
-remote_file "libevent-2.0.21.src.rpm" do
-    #remote_file "root/rpmbuild/SPECS/libevent.spec" do
-    #source "https://raw.github.com/crocodilertc/libevent/master/libevent.spec"
-    #source "https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz"
-    source "ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home%3A/kalyaka/CentOS_CentOS-6/src/libevent2-2.0.21-11.1.src.rpm"
-    action :create
-end
 
-rpm_package "libevent-2.0.21.src.rpm" do
-    options "--force -v"
-    source "//libevent-2.0.21-2.el6.x86_64"
-end
-=end
-=begin
-execute "tar xvfz libevent-2.0.21-stable.tar.gz" do
-    action :run
-    
-end
-#"tar xvfz libevent-2.0.21-stable.tar.gz"
 
-node["libevent"]["download"].each do |name|
-    
-    execute name do
-        action :run
-        cwd "/libevent-2.0.21-stable"
-    end
-end
+#    source "https://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz"
 
-execute "ln -s /usr/local/libexec/* /usr/bin/" do
+cookbook_file "libevent-2.0.21-2.el6.x86_64.rpm" do
+    mode "0777"
+ 	path "libevent-2.0.21-2.el6.x86_64.rpm"
+ 	action :create
 end
-=end
+execute "rpm -i libevent-2.0.21-2.el6.x86_64.rpm" #-vh --force
 
-=begin
-execute "rpmbuild -ba root/rpmbuild/SPECS/libevent.spec" do
-        action :run
-end
 
-node['libevent']['rpm'].each do |name|
-	package name do
-   		source "#{name}"     #   
-   		options "-vh --force"
-   		action :install
-	end
-
-end
-=end
  
 node['centos6.5']['rpm'].each do |name|
  cookbook_file name do
@@ -100,11 +64,15 @@ node['centos6.5']['rpm'].each do |name|
  	path "#{name}" #"#{Chef::Config[:file_cache_path]}#{name}"
  	action :create
  end
- package name do
-   source "#{name}"	#	"#{Chef::Config[:file_cache_path]}/#{name}"
-   action :install
- end
+ execute "rpm -i #{name}"
 end
+
+# rpm_package name do
+#   source "#{name}"	#	"#{Chef::Config[:file_cache_path]}/#{name}"
+#   #options "-vh --force"
+#   action :upgrade # :install
+# end
+
 
 #
 # Load firewall rules we know works
@@ -186,4 +154,3 @@ end
 execute "turnserver -o -v" do
 	action :run
 end
-
