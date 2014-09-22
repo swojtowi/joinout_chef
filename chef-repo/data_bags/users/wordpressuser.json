@@ -1,0 +1,6 @@
+{
+	"id" : "wordpressuser",
+	"password" : "wordpressuser",
+	"groups" : "apache",
+	"uid" : 2014
+}
