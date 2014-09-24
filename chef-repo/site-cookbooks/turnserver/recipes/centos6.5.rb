@@ -110,7 +110,7 @@ if File.directory?("/root/schem_added_sql.lock")
     execute "mysql -u turn -pturn turn< /root/schema.sql"
 end
 
-#directory "/root/schem_added_sql.lock"
+directory "/root/schem_added_sql.lock"
 
 
 node['centos6.5']['mysql']['addUsers']['longTerm'].each do |name|
