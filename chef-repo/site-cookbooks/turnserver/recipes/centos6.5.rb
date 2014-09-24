@@ -106,7 +106,7 @@ execute "rm -f /root/createTurnUser.sql"
 
 
 # size of varchars in schema.sql was minimalised to 512 to 100
-if File.directory?("/root/schem_added_sql.lock")
+if File.directory?("/root/schem_added_sql.lock")==false
     execute "mysql -u turn -pturn turn< /root/schema.sql"
 end
 
