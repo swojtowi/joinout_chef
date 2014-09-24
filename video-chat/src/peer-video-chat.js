@@ -58,7 +58,7 @@ function createEmailParams(to) {
 }
 
 function setupCss() {
-    $('#my-video, #their-video, #step1-error, #step1, #step2, #step3').show();
+    $('#my-video, #their-video, #step1-error, #step1, #step2, #step3').hide();
 
     $('#my-video').css({
         'margin-top': '5%',
