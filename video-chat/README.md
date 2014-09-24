@@ -26,6 +26,8 @@
 
 3. build library
 
+    *npm install* - optinal needed on mac
+
     *bower install*
 
     *grunt*
