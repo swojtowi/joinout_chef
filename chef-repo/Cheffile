@@ -5,6 +5,7 @@ site 'http://community.opscode.com/api/v1'
 
 cookbook 'wordpress', '>= 2.3.0'
 cookbook 'nodejs'
+cookbook 'simple_iptables'
 # cookbook 'users', '~> 1.7.0'
 # cookbook 'users_solo', '>=1.0.2'
 # cookbook 'hostsfile',	'>= 2.4.2'

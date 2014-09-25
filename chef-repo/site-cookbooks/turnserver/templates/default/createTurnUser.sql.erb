@@ -3,7 +3,13 @@
 # DROP DATABASE turn;
 #flush privileges;
     # INSERT INTO mysql.user (user, host, password) VALUES ('turn', 'localhost', PASSWORD('turn'));
+/*
 CREATE USER 'turn'@'localhost' IDENTIFIED BY 'turn';
 create database turn;
 grant all on turn.* to 'turn'@'localhost';
 flush privileges;
+*/
+create database if not exists  turn;
+grant all on `turn`.* to 'turn'@'localhost' identified by 'turn';
+
+

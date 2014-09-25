@@ -10,7 +10,7 @@ default['centos6.5']['packages'] = ["make","gcc","gcc-c++","wget","openssl","ope
 default['libevent']['rpm']= ["/root/rpmbuild/RPMS/x86_64/libevent-2.0.21-2.el6.x86_64.rpm","/root/rpmbuild/RPMS/x86_64/libevent-devel-2.0.21-2.el6.x86_64.rpm","/root/rpmbuild/RPMS/x86_64/libevent-debuginfo-2.0.21-2.el6.x86_64.rpm"]
 
 
-default['centos6.5']['rpm'] = ["turnserver-4.1.2.1-0.el6.x86_64.rpm","turnserver-client-libs-4.1.2.1-0.el6.x86_64.rpm","turnserver-utils-4.1.2.1-0.el6.x86_64.rpm"] #"libevent-2.0.21-2.el6.x86_64.rpm"
+default['centos6.5']['turn'] = ["turnserver-4.1.2.1-0.el6.x86_64.rpm","turnserver-client-libs-4.1.2.1-0.el6.x86_64.rpm","turnserver-utils-4.1.2.1-0.el6.x86_64.rpm"] #"libevent-2.0.21-2.el6.x86_64.rpm"
 default['centos6.5']['mysql']['on'] = ["chkconfig mysqld on","mysqladmin -u root password '123123'"]
 default['centos6.5']['mysql']['addUsers']['longTerm'] = ["turnadmin -a -M \"host=localhost dbname=turn user=turn password=turn\" -u gorst -r north.gov -p hero","turnadmin -a -M \"host=localhost dbname=turn user=turn password=turn\" -u ninefingers -r north.gov -p youhavetoberealistic"]
 #/Users/davidsiecinski/Downloads/libevent-2.0.21-stable (1).tar.gz
