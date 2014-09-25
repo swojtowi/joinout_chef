@@ -119,6 +119,6 @@ end
 template "/etc/turnserver/turnserver.conf" do
   source "turnserver.conf.erb"
 end
-if "ps aux | grep -q [t]urnserver"==false
+if execute "ps aux | grep  '[t]urnserver -o -v'" ==true
     execute "turnserver -o -v"
 end
