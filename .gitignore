@@ -54,5 +54,5 @@ $RECYCLE.BIN/
 # Vagrant
 .vagrant
 
-/cookbooks
+chef-repo/cookbooks
 /tmp
