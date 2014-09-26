@@ -100,7 +100,12 @@ template "/root/schema.sql" do
   # notifies :restart, resources(:service => "iptables")
 end
 
-execute "mysql -u root  < /root/createTurnUser.sql" #execute "mysql -u root -p < /root/createTurnUser.sql"
+userforMysql="-u root"
+if File.directory?("/home/wordpressuser")
+  userforMysql<<"-pilikerandompasswords"  
+end
+
+execute "mysql #{userforMysql} < /root/createTurnUser.sql" #execute "mysql -u root -p < /root/createTurnUser.sql"
 
 execute "rm -f /root/createTurnUser.sql" 
 
