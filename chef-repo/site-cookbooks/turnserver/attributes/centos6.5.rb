@@ -5,7 +5,7 @@ default['directories']['create']=["root/rpmbuild","root/rpmbuild/SOURCES","root/
 default["libevent"]["download"]=["./configure && make","make install"]
 #default["libevent"]["install"]=["./configure --prefix=/bin --disable-static &&
 #make","make install","make clean"]
-default['centos6.5']['packages'] = ["make","gcc","gcc-c++","wget","openssl","openssl-devel","libevent","libevent-devel","kernel-devel","telnet","mysql-server","mysql","perl","postgresql-libs","hiredis"] #,"hiredis"
+default['centos6.5']['packages'] = ["make","gcc","gcc-c++","wget","openssl","openssl-devel","libevent","libevent-devel","kernel-devel","telnet","perl","postgresql-libs","hiredis","perl-DBI"] #,"hiredis" ,"mysql-server","mysql"
 #default['centos6.5']['perl-DBI']=["perl #{Chef::Config[:file_cache_path]}/Makefile.PL","make","make test","make install"]
 default['libevent']['rpm']= ["/root/rpmbuild/RPMS/x86_64/libevent-2.0.21-2.el6.x86_64.rpm","/root/rpmbuild/RPMS/x86_64/libevent-devel-2.0.21-2.el6.x86_64.rpm","/root/rpmbuild/RPMS/x86_64/libevent-debuginfo-2.0.21-2.el6.x86_64.rpm"]
 

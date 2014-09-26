@@ -1,5 +1,4 @@
 
-
 remote_file "#{Chef::Config[:file_cache_path]}epel-release-6-8.noarch.rpm" do
     source "http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm"
     action :create_if_missing
@@ -61,21 +60,8 @@ node['centos6.5']['turn'].each do |name|
  end
 end
 
-=begin
-# no need for this since we have cookbook: iptables_menager
-# Load firewall rules we know works
-#
-template "/etc/sysconfig/iptables" do
-  source "iptables.erb"
-  owner "root"
-  group "root"
-  mode 00600
-  # notifies :restart, resources(:service => "iptables")
-end
-
-execute "service iptables restart"
-
-=end
+include_recipe "mysql::server"
+include_recipe "mysql::client"
 
 execute "service mysqld start"
 
@@ -100,10 +86,9 @@ template "/root/schema.sql" do
   # notifies :restart, resources(:service => "iptables")
 end
 
-userforMysql="-u root"
-if File.directory?("/home/wordpressuser")
-  userforMysql<<"-pilikerandompasswords"  
-end
+
+userforMysql= "-u root -pilikerandompasswords" #"-u root"
+
 
 execute "mysql #{userforMysql} < /root/createTurnUser.sql" #execute "mysql -u root -p < /root/createTurnUser.sql"
 
@@ -124,6 +109,12 @@ end
 template "/etc/turnserver/turnserver.conf" do
   source "turnserver.conf.erb"
 end
-if execute "ps aux | grep  '[t]urnserver -o -v'" ==true
-    execute "turnserver -o -v"
+# run turnserver if returned 1 else do nothing 
+execute "ps aux | grep -q '[t]urnserver -o -v'" do
+  #returns 0
+  not_if do
+     system("turnserver -o -v")
+   end
 end
+
+execute "rm -f turnserver*.rpm libevent-2.0.21-2.el6.x86_64.rpm rpmforge-release-0.5.2-2.el4.rf.x86_64.rpm"
