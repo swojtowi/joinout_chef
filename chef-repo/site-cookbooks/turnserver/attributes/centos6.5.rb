@@ -1,3 +1,4 @@
+include_attribute "mysql"
 
 default['directories']['create']=["root/rpmbuild","root/rpmbuild/SOURCES","root/rpmbuild/SPECS"]
 
