@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
+  # Example for VirtualBox:exi
   	config.vm.hostname = "joinout"
     config.vm.provider "virtualbox" do |vb|
   #   # Don't boot with headless mode
@@ -119,7 +119,8 @@ config.vm.provision :chef_solo do |chef|
     "role[cms]",
     "role[peerjsserver]",
     "role[turnserver]",
-    "role[frontend]"
+    "role[iptables_manager]",
+    #"role[frontend]"
 # "role[mvoip-single-node]",
 # "role[java]",
 # "role[mvoip-common]",
