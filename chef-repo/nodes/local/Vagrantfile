@@ -119,8 +119,7 @@ config.vm.provision :chef_solo do |chef|
     "role[cms]",
     "role[peerjsserver]",
     "role[turnserver]",
-    "role[iptables_manager]",
-    #"role[frontend]"
+    "role[iptables_manager]"
 # "role[mvoip-single-node]",
 # "role[java]",
 # "role[mvoip-common]",

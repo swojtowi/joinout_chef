@@ -55,4 +55,5 @@ $RECYCLE.BIN/
 .vagrant
 
 chef-repo/cookbooks
-/tmp
+chef-repo/tmp
+chef-repo/nodes/local/.*

@@ -1,24 +1,30 @@
+#HELLO WORLD!
 execute "configure_wordpress_message" do
-	command "echo 'Configure CMS recipe - hello world!'; touch '/tmp/configure_cms'"
+	command "echo 'Configure CMS recipe - hello world!'"
 end
 
+#add user wordpressuser
 include_recipe "users_solo::add_wordpress_user"
 
-#kopiowanie pliku
-execute "copy wpn_config.php" do
-	command "cp /var/www/wordpress/wp-config.php /home/wordpressuser/"
-end
+#read wordpressuser's data from data_bag
+wordpressUser_bag = data_bag_item("users", "wordpressUser")
 
-cookbook_file "#{node['joinout_backup']['package_name']}" do
-	path "/home/wordpressuser/#{node['joinout_backup']['package_name']}"
-	action :create_if_missing
-end
+#set attribute for wordpressuser_name
+node.default['cms']['wordpressuser']['name'] = wordpressUser_bag["id"]
 
-execute "make directory for joinout_backup" do
-	command "mkdir /home/wordpressuser/#{node['joinout_backup']['directory_name']}"
-	not_if { ::File.directory?("/home/wordpressuser/#{node['joinout_backup']['directory_name']}") }
-end
+#restore_frontend from joinout_backup zip file
+include_recipe "cms::restore_frontend"
 
-execute "unpack joinout_wordpress_backup" do
-	command "tar xvvzf /home/wordpressuser/#{node['joinout_backup']['package_name']} -C /home/wordpressuser/#{node['joinout_backup']['directory_name']}" 
+#set attribute for apache's DocumentRoot path
+node.default['cms']['apache']['docroot_dir'] = "/home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}"
+
+#update apache's config file from template 
+template "#{node['apache']['dir']}/sites-available/wordpress.conf" do
+ 	source 'wordpress.conf.erb'
+ 	mode 0644
+  	variables(
+    	:document_root_path          => node['cms']['apache']['docroot_dir']
+  	)
+  	backup 0
+  	action :create
 end
