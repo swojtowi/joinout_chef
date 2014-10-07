@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+
+cookbook 'wordpress', '>= 2.3.0'
+cookbook 'nodejs'
+cookbook 'simple_iptables'
+cookbook 'git', '>= 4.0.2'
+# cookbook 'users', '~> 1.7.0'
+# cookbook 'users_solo', '>=1.0.2'
+# cookbook 'hostsfile',	'>= 2.4.2'
+# cookbook 'ark',	'>= 0.4.2'
+# cookbook 'java', '>=1.18.0'
+# cookbook 'sudo', '>=2.3.0'
+# cookbook 'openvz', '>=0.1.0'
+# cookbook 'ntp'
+
+# cookbook 'chef-client'
+
+# cookbook 'apache2', '>= 1.0.0'
+
+# cookbook 'rvm',
+#   :git => 'https://github.com/fnichol/chef-rvm'
+
+# cookbook 'postgresql',
+#   :git => 'https://github.com/findsyou/cookbooks',
+#   :ref => 'postgresql-improvements'
+
+#cookbook 'forever',
+#:git => 'https://github.com/trabian/chef-forever'
