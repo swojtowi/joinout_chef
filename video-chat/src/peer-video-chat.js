@@ -77,54 +77,53 @@ function setupCss() {
     });
 
     $('#video-container, #steps, #container').css('position', 'relative');
-
-	$('#step0-try, #step1-retry, #end-call').css({
-		'text-decoration':'none',
-		'color':'#fff',
-		'background-color':'#34233f',
-		'display':'block',	
-		'padding':'8px 8px 5px 8px',
-		'max-width':'130px',
-		'text-align':'center',
-		'border-bottom':'4px solid #34233f',
-		'transition':' background-color 0.5s ease'
-	});
-
-	$("#step0-try, #step1-retry, #end-call, #send-mail-link").hover(
-		function() {
-	  		$(this).css({
-	  			'border-bottom':'4px solid #bcd337',
-				'background-color':'#473f47'})
-		},
-		function() {
-			$(this).css({
-	  			'border-bottom':'4px solid #34233f',
-				'background-color':'#34233f'})
-		});
-
-	$('#share-link').css({
-		'border':'2px solid #bcd337',
-		'padding':'15px 8px',
-		'max-width':'200px'
-	});
-
-	$('#send-mail-link-to').css({
-		'border':'2px solid #bcd337',
-		'padding':'5px 8px',
-		'width':'200px'
-	});
-	
-	$('#send-mail-link').css({
-		'text-decoration':'none',
-		'color':'#fff',
-		'background-color':'#34233f',
-		'display':'block',	
-		'padding':'3px 10px',
-		'max-width':'200px',
-		'text-align':'center',
-		'border-bottom':'4px solid #34233f',
-		'transition':' background-color 0.5s ease'
-	});
+    $('#video-container, #steps').css({'width': '30%',
+            'float': 'left',
+            'padding': '5px'}
+    );
+    $('#step1-retry, #end-call').css({
+        'text-decoration': 'none',
+        'color': '#fff',
+        'background-color': '#34233f',
+        'display': 'block',
+        'padding': '8px 8px 5px 8px',
+        'max-width': '130px',
+        'text-align': 'center',
+        'border-bottom': '4px solid #34233f',
+        'transition': ' background-color 0.5s ease'
+    });
+    $("#step1-retry, #end-call, #send-mail-link").hover(function () {
+            $(this).css({
+                'border-bottom': '4px solid #bcd337',
+                'background-color': '#473f47'})
+        },
+        function () {
+            $(this).css({
+                'border-bottom': '4px solid #34233f',
+                'background-color': '#34233f'})
+        });
+    $('#share-link').css({
+        'border': '2px solid #bcd337',
+        'padding': '15px 8px',
+        'max-width': '300px',
+        'margin-bottom': '10px'
+    });
+    $('#send-mail-link-to').css({
+        'border': '2px solid #bcd337',
+        'padding': '5px 8px',
+        'width': '200px'
+    });
+    $('#send-mail-link').css({
+        'text-decoration': 'none',
+        'color': '#fff',
+        'background-color': '#34233f',
+        'display': 'block',
+        'padding': '3px 10px',
+        'max-width': '200px',
+        'text-align': 'center',
+        'border-bottom': '4px solid #34233f',
+        'transition': ' background-color 0.5s ease'
+    });
 }
 
 
