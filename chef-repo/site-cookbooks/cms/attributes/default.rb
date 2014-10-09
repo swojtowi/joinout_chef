@@ -11,5 +11,6 @@ default['cms']['wordpress_new']['db']['name'] = "wordpress"
 default['cms']['wordpress_new']['db']['user'] = "wordpressuser"
 default['cms']['wordpress_new']['db']['pass'] = "123123"
 default['cms']['wordpress_new']['db']['host'] = "localhost"
-default['cms']['wordpressuser']['name']
+default['cms']['wordpressuser']['name'] = "wordpressUser"
+default['cms']['wordpressuser']['password']['hash'] = "$1$GZzh5WlV$3b4NwVwokwW2wK9l4ISEw/"
 default['cms']['apache']['docroot_dir']

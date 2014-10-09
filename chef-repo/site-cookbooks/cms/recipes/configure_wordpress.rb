@@ -4,13 +4,10 @@ execute "configure_wordpress_message" do
 end
 
 #add user wordpressuser
-include_recipe "users_solo::add_wordpress_user"
-
-#read wordpressuser's data from data_bag
-wordpressUser_bag = data_bag_item("users", "wordpressUser")
-
-#set attribute for wordpressuser_name
-node.default['cms']['wordpressuser']['name'] = wordpressUser_bag["id"]
+user "#{node['cms']['wordpressuser']['name']}" do
+	password "#{node['cms']['wordpressuser']['password']['hash']}"
+	gid "apache"
+end
 
 #restore_frontend from joinout_backup zip file
 include_recipe "cms::restore_frontend"
@@ -28,3 +25,6 @@ template "#{node['apache']['dir']}/sites-available/wordpress.conf" do
   	backup 0
   	action :create
 end
+
+#install ftp access
+include_recipe "cms::install_ftp"

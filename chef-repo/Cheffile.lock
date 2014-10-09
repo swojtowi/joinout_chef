@@ -53,6 +53,9 @@ SITE
       build-essential (>= 0.0.0)
       yum-epel (>= 0.0.0)
     ohai (2.0.1)
+    onddo_proftpd (1.0.0)
+      ohai (>= 0.0.0)
+      yum-epel (>= 0.0.0)
     openssl (2.0.0)
       chef-sugar (>= 0.0.0)
     pacman (1.1.1)
@@ -104,6 +107,7 @@ SITE
 DEPENDENCIES
   git (>= 4.0.2)
   nodejs (>= 0)
+  onddo_proftpd (>= 1.0.0)
   simple_iptables (>= 0)
   wordpress (>= 2.3.0)
 
