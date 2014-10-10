@@ -12600,10 +12600,14 @@ setupCss();
 // Compatibility shim
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 // PeerJS object
-var stunTurnServerHost = '54.245.236.20';
-var peerJsServerHost = '193.187.64.237';
-var peerJsServerPort = 9000;
-var peerJsServerPath = '';
+// var stunTurnServerHost = '54.245.236.20';
+var stunTurnServerHost = '<%= @turnserver_url %>';
+// var peerJsServerHost = '193.187.64.237';
+var peerJsServerHost = '<%= @peerjs_url %>';
+// var peerJsServerPort = 9000;
+var peerJsServerPort = <%= @peerjs_port %>;
+// var peerJsServerPath = '';
+var peerJsServerPath = '<%= @peerjs_path %>';
 var peer = new Peer({ host: peerJsServerHost, port: peerJsServerPort, path: peerJsServerPath, debug: 3,
     config: {'iceServers': [
         {url: 'turn:' + stunTurnServerHost + ':3478', credential: 'youhavetoberealistic', username: 'ninefingers'},

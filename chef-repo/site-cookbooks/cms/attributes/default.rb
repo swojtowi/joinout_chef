@@ -14,3 +14,6 @@ default['cms']['wordpress_new']['db']['host'] = "localhost"
 default['cms']['wordpressuser']['name'] = "wordpressUser"
 default['cms']['wordpressuser']['password']['hash'] = "$1$GZzh5WlV$3b4NwVwokwW2wK9l4ISEw/"
 default['cms']['apache']['docroot_dir']
+default['cms']['peerjs']['empty_path'] = ""
+default['cms']['peerjs']['path'] = "/usr/local/bin/peerjs"
+default['cms']['peerjs']['port'] = 443

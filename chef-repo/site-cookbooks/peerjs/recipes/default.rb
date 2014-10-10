@@ -21,6 +21,6 @@ nodejs_npm "forever"
 execute "ps aux | grep -q '[f]orever'" do
   not_if do
   	 system("rm -f /root/.forever/forever.log")
-     system("forever start -l forever.log -o out.log -e err.log  --minUptime 100 /usr/local/bin/peerjs --port 9000") #--minUptime 100
+     system("forever start -l forever.log -o out.log -e err.log  --minUptime 100 #{node['cms']['peerjs']['path']} --port #{node['cms']['peerjs']['port']}") #--minUptime 100
    end
 end

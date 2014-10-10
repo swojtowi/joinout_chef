@@ -36,15 +36,15 @@ directory "/home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_
 	action :create
 end
 
-#chmod for directories in joinout_backup directory
-execute "chmod for joinout_backup directories" do
-	command "find /home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/. -type d -exec chmod 755 {} \\;"
-end
+# #chmod for directories in joinout_backup directory
+# execute "chmod for joinout_backup directories" do
+# 	command "find /home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/. -type d -exec chmod 755 {} \\;"
+# end
 
-#chmod for files in joinout_backup directory
-execute "chmod for joinout_backup files" do
-	command "find /home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/. -type f -exec chmod 644 {} \\;"
-end
+# #chmod for files in joinout_backup directory
+# execute "chmod for joinout_backup files" do
+# 	command "find /home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/. -type f -exec chmod 644 {} \\;"
+# end
 
 template "/home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/manifest.json" do
   source 'manifest.json.erb'
@@ -70,7 +70,11 @@ template "/home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_b
   source 'video-chat.min_.js.orig.erb'
   mode 644
     variables(
-      :joinout_url => node['network']['interfaces']['eth1']['addresses'].keys[1]
+      :joinout_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :peerjs_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :turnserver_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :peerjs_path => node['cms']['peerjs']['empty_path'],
+      :peerjs_port => node['cms']['peerjs']['port']
     )
     backup 0
     action :create
@@ -80,7 +84,11 @@ template "/home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_b
   source 'video-chat.min_.js.erb'
   mode 644
     variables(
-      :joinout_url => node['network']['interfaces']['eth1']['addresses'].keys[1]
+      :joinout_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :peerjs_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :turnserver_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :peerjs_path => node['cms']['peerjs']['empty_path'],
+      :peerjs_port => node['cms']['peerjs']['port']
     )
     backup 0
     action :create
@@ -90,10 +98,24 @@ template "/home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_b
   source 'video-chat.js.erb'
   mode 644
     variables(
-      :joinout_url => node['network']['interfaces']['eth1']['addresses'].keys[1]
+      :joinout_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :peerjs_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :turnserver_url => node['network']['interfaces']['eth1']['addresses'].keys[1],
+      :peerjs_path => node['cms']['peerjs']['empty_path'],
+      :peerjs_port => node['cms']['peerjs']['port']
     )
     backup 0
     action :create
+end
+
+#chmod for directories in joinout_backup directory
+execute "chmod for joinout_backup directories" do
+  command "find /home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/. -type d -exec chmod 755 {} \\;"
+end
+
+#chmod for files in joinout_backup directory
+execute "chmod for joinout_backup files" do
+  command "find /home/#{node['cms']['wordpressuser']['name']}/#{node['cms']['joinout_backup']['directory_name']}/. -type f -exec chmod 644 {} \\;"
 end
 
 #restore database from joinout_backup_zip file
